@@ -1,4 +1,11 @@
 
-#CT {
+#state-box {
     display:none;
+}
+
+.map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: .75;
 }
