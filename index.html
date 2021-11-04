@@ -13,7 +13,7 @@
 
 <body>
     <!-- Hero section with title and subtitle and Bulma CSS-->
-    <section class="hero is-info">
+    <section class="hero is-link">
         <div class="hero-body">
             <p class="title has-text-centered">
                 Follow the Money
@@ -28,8 +28,9 @@
 
     <!-- Dropdown select button -->
     <div class="column is-offset-5">
-        <div class="select is-danger is-rounded is-normal is-focused">
+        <div id="state-select" class="select is-danger is-rounded is-normal is-focused">
             <select>
+                <option value="Select State">Select State</option>
                 <option value="Alabama">Alabama</option>
                 <option value="Alaska">Alaska</option>
                 <option value="Arizona">Arizona</option>
@@ -82,17 +83,17 @@
                 <option value="Wyoming">Wyoming</option>
             </select>
         </div>
-    </div>
+    </div>  
 
-    <div class="container is-max-desktop">
-        <iframe src="https://createaclickablemap.com/map.php?&id=106815&maplocation=false&online=true" width="900"
-            height="525" style="border: none;"></iframe>
+    <!--picture of USA map-->
+    <div class="map">
+        <img src="assets/css/17-170115_blue-us-map-png.png" alt="USA Map">
     </div>
 
     <!--Popup for CT and display will be "none"-->
-    <div class="container box" id="CT">
+    <div class="card" id="state-box">
         <h1 class="senators">Senators</h1>
-        <p> </p>
+        <h2 id="senator-one">Senator-1</h2><h2 id="senator-two">Senator-2</h2>
     </div>
 
     <!-- Footer -->
