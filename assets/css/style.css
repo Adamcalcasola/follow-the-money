@@ -1,4 +1,27 @@
+#map {
+    background-image: url('17-170115_blue-us-map-png.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: .75;
+}
 
-#CT {
-    display:none;
+.board {
+    margin: 30px;
+    border: solid;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.name {
+    text-align: center;
+}
+
+a {
+    display: block;
+    color: red;
 }
