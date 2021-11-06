@@ -1,13 +1,24 @@
 let osApiKey = "&apikey=57bf365637e080dcba9bad64d8d27cd9";
-let ppApiKey = "X-API-Key:kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
+let ppApiKey = "&apikey=X-API-Key:kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
 let osUrl = "http://www.opensecrets.org/api/?method=getLegislators&output=json&id=";
-let ppUrl = "https://api.propublica.org/congress/v1/house/votes/recent.json";
+let ppUrl = "https://api.propublica.org/congress/v1/both/votes/recent.json";
+
 
 let stateSelect = document.querySelector("#state");
 let delegationEl = document.querySelector("#map");
 
+function voteRecord() {
+    fetch(ppUrl + "?method=" + ppApiKey)
+    .then(function(response) {
+        return response.json();
+    }).then(function(data) {
+        console.log(data);
+    })
+}
 
+function repBios() {
 
+}
 
 function displayReps() {
     delegationEl.innerHTML = "";
@@ -21,19 +32,24 @@ function displayReps() {
             return response.json();
         }).then(function(data) {
             for (i=0; i<data.response.legislator.length; i++) {
+                console.log(data);
                 let legislator = Object.values(data.response.legislator[i]);
                 let repBox = document.createElement("div");
                 repBox.className = "name";
                 let repName = document.createElement("a");
-                repName.setAttribute("href", legislator[0].website);
+                let repParty = document.createElement("p");
+                repName.setAttribute("href", "https://bioguide.congress.gov/search/bio/" + legislator[0].bioguide_id);
                 repName.setAttribute("target", "_blank");
                 repName.textContent = legislator[0].firstlast;
+                repParty.textContent = legislator[0].bioguide_id;
                 stateBox.appendChild(repBox);
                 repBox.appendChild(repName);
+                repBox.appendChild(repParty);
             }
         })
 }
 
+voteRecord();
 stateSelect.addEventListener('change', (event) => {displayReps();});
 
 // stateSelect.addEventListener('change', (event) => {
