@@ -25,3 +25,13 @@ a {
     display: block;
     color: red;
 }
+
+#billVotes {
+    margin: 5px;
+    border: solid 2px;
+
+}
+
+.votebox {
+    text-align: center;
+}

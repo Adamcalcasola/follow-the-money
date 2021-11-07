@@ -8,7 +8,7 @@ let ppUrl = "https://api.propublica.org/congress/v1/both/votes/recent.json";
 
 let stateSelect = document.querySelector("#state");
 let delegationEl = document.querySelector("#map");
-let billVotesEl = document.querySelector("#billVotes")
+
 
 
 
@@ -40,7 +40,7 @@ function displayReps() {
 }
 
 function proPublicaFetch(){
-    // let bills = [];
+    let billVotesEl = document.querySelector("#billVotes")
     billVotesEl.innerHTML = "";
     let billVotesBox = document.createElement("div");
     billVotesBox.className = "votebox";
@@ -53,17 +53,15 @@ function proPublicaFetch(){
     ).then(function(response){
             return response.json();
         }).then(function(data){
-            console.log(data.results.votes[0]);
-            for (i = 0, i < data.results.votes.length; i++;){
-                let votes = Object.values(data.results.votes[i]);
-                console.log(data.results.votes[0].description);
-
-
+            console.log(data.results);
+            for (i = 0; i < data.results.votes.length; i++){
+                let votes = data.results.votes;
+                console.log(data.results.votes[0].url);
                 let voteBox = document.createElement("div");
                 voteBox.className = "votes";
                 let billName = document.createElement("p");
-                billName.textContent = votes[0].description;
-                billName.setAttribute("href", votes[0].url);
+                billName.textContent = votes.description;
+                billName.setAttribute("href", votes[i].url);
                 billName.setAttribute("target", "_blank"); 
                 billVotesBox.appendChild(voteBox);
                 voteBox.appendChild(billName);
@@ -80,9 +78,9 @@ function proPublicaFetch(){
 
 
 
-proPublicaFetch();
+// proPublicaFetch();
 
-stateSelect.addEventListener('change', (event) => {displayReps();});
+stateSelect.addEventListener('change', (event) => {displayReps(), proPublicaFetch();});
 
 // stateSelect.addEventListener('change', (event) => {
 //     console.log(stateSelect.value);
