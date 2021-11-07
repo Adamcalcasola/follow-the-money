@@ -11,10 +11,28 @@
 
 .board {
     margin: 30px;
-    border: solid;
+    border: solid red;
     padding: 10px;
     border-radius: 10px;
-    background-color: white;
+    width: 600px;
+    color: black;
+    text-align: center;
+    background-color: rgb(255, 240, 247);
+    font-size: 14px;
+}
+.cycle {
+    font-size: 18px;
+}
+.rep-name {
+    font-weight: bold;
+    text-align: center;
+    text-decoration: underline;
+    font-size: 22px;
+    color: rgb(15, 33, 136);
+}
+
+h2 {
+    text-decoration: underline;
 }
 
 h2 {

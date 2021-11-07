@@ -7,6 +7,7 @@ let stateSelect = document.querySelector("#state");
 let delegationEl = document.querySelector("#map");
 let selectBar = document.getElementById("select-bar");
 
+//get data from pro publica API
 function voteRecord() {
     fetch(ppUrl, {
         method: "GET",
@@ -19,6 +20,7 @@ function voteRecord() {
     })
 }
 
+//get data from  open source api
 function repBios(data) {
     //console.log(data);
     delegationEl.innerHTML = "";
@@ -27,6 +29,7 @@ function repBios(data) {
             return response.json();
         }).then(function(data) {
             console.log(data);
+            //add data to the container by creating elements
             let objBios = Object.values(data.response.industries);
             let box = document.createElement("div");
             let name = document.createElement("div");
@@ -39,11 +42,16 @@ function repBios(data) {
             let industryTitle = document.createElement("h2");
             let contributionsTitle = document.createElement("h2");
 
+            //give elements class names
             box.className = "board";
             container.className = "columns";
             column1.className = "column";
             column2.className = "column";
+            name.className = "rep-name";
+            cycle.className= "cycle";
+            
 
+            //get text from API
             name.textContent = objBios[0].cand_name;
             cycle.textContent = "Cycle Year: " + objBios[0].cycle;
             updated.textContent = "Last Updated: " + objBios[0].last_updated;
@@ -51,6 +59,7 @@ function repBios(data) {
             industryTitle.textContent = "Industry:";
             contributionsTitle.textContent = "Total Contributions:";
 
+            //append the text to the box
             delegationEl.appendChild(box);
             box.appendChild(name);
             box.appendChild(cycle);
