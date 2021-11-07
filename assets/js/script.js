@@ -3,9 +3,9 @@ let ppApiKey = "kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
 let osUrl = "http://www.opensecrets.org/api/?output=json";
 let ppUrl = "https://api.propublica.org/congress/v1/both/votes/recent.json";
 
-
 let stateSelect = document.querySelector("#state");
 let delegationEl = document.querySelector("#map");
+let selectBar = document.getElementById("select-bar");
 
 function voteRecord() {
     fetch(ppUrl, {
@@ -20,7 +20,7 @@ function voteRecord() {
 }
 
 function repBios(data) {
-    console.log(data);
+    //console.log(data);
     delegationEl.innerHTML = "";
     fetch(osUrl + "&method=candIndustry&cid=" + data + "&cycle=2021" + osApiKey)
         .then(function(response) {
@@ -36,6 +36,8 @@ function repBios(data) {
             let container = document.createElement("div");
             let column1 = document.createElement("div");
             let column2 = document.createElement("div");
+            let industryTitle = document.createElement("h2");
+            let contributionsTitle = document.createElement("h2");
 
             box.className = "board";
             container.className = "columns";
@@ -43,9 +45,11 @@ function repBios(data) {
             column2.className = "column";
 
             name.textContent = objBios[0].cand_name;
-            cycle.textContent = objBios[0].cycle;
-            updated.textContent = objBios[0].last_updated;
-            origin.textContent = objBios[0].origin;
+            cycle.textContent = "Cycle Year: " + objBios[0].cycle;
+            updated.textContent = "Last Updated: " + objBios[0].last_updated;
+            origin.textContent = "Origin: " + objBios[0].origin;
+            industryTitle.textContent = "Industry:";
+            contributionsTitle.textContent = "Total Contributions:";
 
             delegationEl.appendChild(box);
             box.appendChild(name);
@@ -54,7 +58,9 @@ function repBios(data) {
             box.appendChild(origin);
             box.appendChild(container);
             container.appendChild(column1);
-            container.appendChild(column2);            
+            container.appendChild(column2);
+            column1.appendChild(industryTitle);
+            column2.appendChild(contributionsTitle);            
 
             for (i=0;i<data.response.industries.industry.length;i++) {
                 let objData = Object.values(data.response.industries.industry[i]);
@@ -71,45 +77,41 @@ function repBios(data) {
 }
 
 function displayReps() {
-    delegationEl.innerHTML = "";
+    //delegationEl.innerHTML = "";
+    selectBar.removeChild(selectBar.lastChild);
+
     let state = stateSelect.value;
     let stateBox = document.createElement("div");
-    stateBox.className = "board";
-    delegationEl.appendChild(stateBox);
-    //console.log(stateSelect.value);
+    let selectBox = document.createElement("div");
+    let repSelect = document.createElement("select");
+    let nilOption = document.createElement("option");
+
+    stateBox.classList = "column is-offset-6";
+    selectBox.classList = "select is-danger is-rounded is-normal is-focused";
+    repSelect.setAttribute("id", "rep-select");
+    nilOption.textContent = "Select Representitive";
+
+    selectBar.appendChild(selectBox);
+    selectBox.appendChild(repSelect);
+    repSelect.appendChild(nilOption);
+
     fetch(osUrl + "&method=getLegislators&id=" + state + osApiKey)
         .then(function(response) {
             return response.json();
         }).then(function(data) {
             for (i=0; i<data.response.legislator.length; i++) {
-                //console.log(data);
                 let legislator = Object.values(data.response.legislator[i]);
-                let repBox = document.createElement("div");
-                repBox.className = "name";
-                let repName = document.createElement("button");
-                let repParty = document.createElement("p");
-                //repName.setAttribute("href", "https://bioguide.congress.gov/search/bio/" + legislator[0].bioguide_id);
-                //repName.setAttribute("target", "_blank");
-                repName.setAttribute("id", legislator[0].firstLast);
-                repName.addEventListener("click", function() {
-                    repBios(legislator[0].cid);
-                })
-                repName.textContent = legislator[0].firstlast;
-                repParty.textContent = legislator[0].bioguide_id;
-                stateBox.appendChild(repBox);
-                repBox.appendChild(repName);
-                //repBox.appendChild(repParty);
+                let repOption = document.createElement("option");
+                repOption.setAttribute("value", legislator[0].cid);
+                repOption.textContent = legislator[0].firstlast;
+                repSelect.appendChild(repOption);
             }
-        })
+            selectBox.addEventListener("change", (event) => {
+                repBios(event.target.value);
+            });
+        })  
 }
 
 //voteRecord();
 stateSelect.addEventListener('change', (event) => {displayReps();});
-
-// stateSelect.addEventListener('change', (event) => {
-//     console.log(stateSelect.value);
-// });
-
-
-//if (window.addEventListener) { window.addEventListener("message", function (event) { if (event.data.length >= 22) { if (event.data.substr(0, 22) == "__MM-LOCATION.REDIRECT") location = event.data.substr(22); } }, false); } else if (window.attachEvent) { window.attachEvent("message", function (event) { if (event.data.length >= 22) { if (event.data.substr(0, 22) == "__MM-LOCATION.REDIRECT") location = event.data.substr(22); } }, false); }
 

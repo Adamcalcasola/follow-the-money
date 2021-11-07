@@ -18,6 +18,10 @@
     width: 600px;
 }
 
+h2 {
+    text-decoration: underline;
+}
+
 .name {
     text-align: center;
 }
