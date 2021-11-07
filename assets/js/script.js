@@ -1,26 +1,53 @@
 let osApiKey = "&apikey=57bf365637e080dcba9bad64d8d27cd9";
 let ppApiKey = "kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
 let osUrl = "http://www.opensecrets.org/api/?output=json";
-let ppUrl = "https://api.propublica.org/congress/v1/both/votes/recent.json";
+let ppUrl = "https://api.propublica.org/congress/v1/members/";
+let aaa = "/office_expenses/2020/4.json";
+let bbb = "https://api.propublica.org/congress/v1/members/B001277/votes.json"
+//https://api.propublica.org/congress/v1/members/{member-id}/bills/{type}.json
+//https://api.propublica.org/congress/v1/members/{member-id}/votes.json
 
 let stateSelect = document.querySelector("#state");
 let delegationEl = document.querySelector("#map");
+let voteRecordEl = document.getElementById("state-box");
 let selectBar = document.getElementById("select-bar");
 
-function voteRecord() {
-    fetch(ppUrl, {
+function voteRecord(cid) {
+    console.log(cid);
+    
+    
+    
+    
+    
+    fetch(bbb, {
         method: "GET",
         headers: {"X-API-Key" : ppApiKey}
     })
     .then(function(response) {
         return response.json();
     }).then(function(data) {
-        console.log(data);
+        for (i=0;i<data.results[0].votes.length;i++) {
+        //console.log(data.results[0].votes[i].description);
+        //console.log(data.results[0].votes[i].position);
+        let container = document.createElement("div");
+        let column1 = document.createElement("div");
+        let column2 = document.createElement("div");
+        let billDesc = document.createElement("div");
+        let position = document.createElement("div");
+        billDesc.textContent = data.results[0].votes[i].description;
+        position.textContent = data.results[0].votes[i].position;
+        voteRecordEl.appendChild(container);
+        container.appendChild(column1);
+        container.appendChild(column2);
+        column1.appendChild(billDesc);
+        column2.appendChild(position);
+        }
     })
 }
 
 function repBios(data) {
     //console.log(data);
+    voteRecord(data);
     delegationEl.innerHTML = "";
     fetch(osUrl + "&method=candIndustry&cid=" + data + "&cycle=2021" + osApiKey)
         .then(function(response) {
