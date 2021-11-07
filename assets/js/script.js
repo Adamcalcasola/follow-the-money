@@ -1,12 +1,14 @@
 let osApiKey = "&apikey=57bf365637e080dcba9bad64d8d27cd9";
 let ppApiKey = "kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
 let osUrl = "http://www.opensecrets.org/api/?method=getLegislators&output=json&id=";
-let ppUrl = "https://api.propublica.org/congress/v1/both/votes/recent.json" ;
+let ppUrl = "https://api.propublica.org/congress/v1/both/votes/recent.json";
+
 
 
 
 let stateSelect = document.querySelector("#state");
 let delegationEl = document.querySelector("#map");
+let billVotesEl = document.querySelector("#billVotes")
 
 
 
@@ -17,7 +19,7 @@ function displayReps() {
     let stateBox = document.createElement("div");
     stateBox.className = "board";
     delegationEl.appendChild(stateBox);
-    console.log(stateSelect.value);
+    // console.log(stateSelect.value);
     fetch(osUrl + state + osApiKey)
         .then(function(response) {
             console.log(response);
@@ -38,20 +40,39 @@ function displayReps() {
 }
 
 function proPublicaFetch(){
-    // let state = stateSelect.value;
+    // let bills = [];
+    billVotesEl.innerHTML = "";
+    let billVotesBox = document.createElement("div");
+    billVotesBox.className = "votebox";
+    billVotesEl.appendChild(billVotesBox);
     fetch(ppUrl, {
         method: "GET",
         headers: {"X-API-Key" : ppApiKey, 
                 "Content-Type": "application/json"},
                 }
     ).then(function(response){
-            console.log(response);
             return response.json();
+        }).then(function(data){
+            console.log(data.results.votes[0]);
+            for (i = 0, i < data.results.votes.length; i++;){
+                let votes = Object.values(data.results.votes[i]);
+                console.log(data.results.votes[0].description);
+
+
+                let voteBox = document.createElement("div");
+                voteBox.className = "votes";
+                let billName = document.createElement("p");
+                billName.textContent = votes[0].description;
+                billName.setAttribute("href", votes[0].url);
+                billName.setAttribute("target", "_blank"); 
+                billVotesBox.appendChild(voteBox);
+                voteBox.appendChild(billName);
+                    
+            }
+
+           
         })
-        //   .then(function(data){
-        //     for (i = 0; i < data.response.length; i++){      
-            // }
-        // })
+       
       
 }
 
