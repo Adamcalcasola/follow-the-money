@@ -3,7 +3,11 @@ let ppApiKey = "kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
 let osUrl = "http://www.opensecrets.org/api/?output=json";
 let ppUrl = "https://api.propublica.org/congress/v1/members/";
 let aaa = "/office_expenses/2020/4.json";
-let bbb = "https://api.propublica.org/congress/v1/members/B001277/votes.json"
+let houseProUrlA = "https://api.propublica.org/congress/v1/members/"  
+let houseProUrlB = "/votes.json";
+let houseMemberId = [];
+let senateMemberId = [];
+let cid = [];
 //https://api.propublica.org/congress/v1/members/{member-id}/bills/{type}.json
 //https://api.propublica.org/congress/v1/members/{member-id}/votes.json
 
@@ -13,18 +17,56 @@ let voteRecordEl = document.getElementById("state-box");
 let selectBar = document.getElementById("select-bar");
 
 
+function getHouseMemberId() {
 
-function voteRecord(cid) {
+    let houseUrl = "https://api.propublica.org/congress/v1/116/house/members.json";
+
+    fetch(houseUrl, {method: "GET", headers: {"X-API-Key" : ppApiKey}
+    })
+    .then(function(response){
+        return response.json();
+    })
+    .then (function(data){
+        // console.log(data.results[0].members);
+        for (i=0;i<data.results[0].members[0].length; i++);
+            let houseId = data.results[0].members[0].crp_id;
+            houseMemberId.push(houseId);    
+            console.log(houseMemberId);
+        
+    })
+    
+}
+
+function getSenateMemberId() {
+    // console.log(cid)
+    
+    let houseUrl = "https://api.propublica.org/congress/v1/116/senate/members.json";
+
+    fetch(houseUrl, {method: "GET", headers: {"X-API-Key" : ppApiKey}
+    })
+    .then(function(response){
+        return response.json();
+    })
+    .then (function(data){
+        console.log(data.results[0].members);
+        for (i=0;i<data.results[0].members[0].length; i++);
+            let senateId = data.results[0].members[0].crp_id;
+            senateMemberId.push(senateId);    
+            console.log(senateMemberId);
+        
+    })
+
+
+    
+}
+
+
+
+
+function voteRecord() {
     // console.log(cid);
     
-    
-    
-    
-    
-    fetch(bbb, {
-        method: "GET",
-        headers: {"X-API-Key" : ppApiKey}
-    })
+    fetch(houseProUrlA, + houseMemberId + "/votes.json", {method: "GET", headers: {"X-API-Key" : ppApiKey}} )
     .then(function(response) {
         return response.json();
     }).then(function(data) {
@@ -143,4 +185,5 @@ function displayReps() {
 
 //voteRecord();
 getHouseMemberId();
+getSenateMemberId();
 stateSelect.addEventListener('change', (event) => {displayReps();});
