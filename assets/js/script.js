@@ -12,8 +12,10 @@ let delegationEl = document.querySelector("#map");
 let voteRecordEl = document.getElementById("state-box");
 let selectBar = document.getElementById("select-bar");
 
+
+
 function voteRecord(cid) {
-    console.log(cid);
+    // console.log(cid);
     
     
     
@@ -137,8 +139,8 @@ function displayReps() {
                 repBios(event.target.value);
             });
         })  
-}
+};
 
 //voteRecord();
+getHouseMemberId();
 stateSelect.addEventListener('change', (event) => {displayReps();});
-
