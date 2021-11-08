@@ -12,18 +12,6 @@ let delegationEl = document.querySelector("#map");
 let voteRecordEl = document.getElementById("state-box");
 let selectBar = document.getElementById("select-bar");
 
-function returnChamber(a, b) {
-    console.log(a);
-    console.log(b);
-    if (a < b - 2) {
-        let chamber = "house"
-        return chamber;
-    } else {
-        let chamber = "senate"
-        return chamber;
-    }
-}
-
 function returnMemberId(cid, data) {
     for (i=0;i<data.results[0].members.length;i++) {
         if (cid === data.results[0].members[i].crp_id) {
@@ -33,24 +21,26 @@ function returnMemberId(cid, data) {
     }
 }
 
-function voteRecord(cid) {
+function voteRecord(id, state) {
     //console.log(cid);
-    fetch("https://api.propublica.org/congress/v1/117/" + "senate" + "/members.json", {
-        method: "GET",
-        headers: {"X-API-Key" : ppApiKey}
-    }).then(function(response) {
-        return response.json();
-    }).then(function(data) {
-        //console.log(data);
-        let memberId = returnMemberId(cid, data);
+    // fetch("https://api.propublica.org/congress/v1/117/" + chamber + "/members.json", {
+    //     method: "GET",
+    //     headers: {"X-API-Key" : ppApiKey}
+    // }).then(function(response) {
+    //     return response.json();
+    // }).then(function(data) {
+    //     console.log(data);
+        //let name = data.results[0].
+        //let memberId = returnMemberId(cid, data);
         
-        fetch(ppUrl + memberId + "/votes.json", {
+        fetch(ppUrl + id + "/votes.json", {
             method: "GET",
             headers: {"X-API-Key" : ppApiKey}
         }).then(function(response) {
             return response.json();
         }).then(function(data) {
             console.log(data);
+            
             for (i=0;i<data.results[0].votes.length;i++) {
                 //console.log(data.results[0].votes[i].description);
                 //console.log(data.results[0].votes[i].position);
@@ -68,12 +58,20 @@ function voteRecord(cid) {
                 column2.appendChild(position);
             }
         })
-    })
+        repBios(state);
+    //})
 }
 
-function repBios(cid, chamber) {
-    console.log(chamber);
+function repBios(state) {
     delegationEl.innerHTML = "";
+    fetch(osUrl + "&method=getLegislators&id=" + state + osApiKey)
+        .then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            console.log(data);
+            let legislator = Object.values(data.response.legislator[i]);
+            let cid = data;
+        })
     fetch(osUrl + "&method=candIndustry&cid=" + cid + "&cycle=2021" + osApiKey)
         .then(function(response) {
             return response.json();
@@ -128,15 +126,16 @@ function repBios(cid, chamber) {
 
             }
             //let objAttr = Object.values(data.response.industries);
-            voteRecord(cid);
+            //repBios(cid);
         })
 }
 
-function displayReps() {
+function displayReps(state, chamber) {
     //delegationEl.innerHTML = "";
-    selectBar.removeChild(selectBar.lastChild);
 
-    let state = stateSelect.value;
+    //selectBar.removeChild(selectBar.lastChild);
+
+    //let state = stateSelect.value;
     let stateBox = document.createElement("div");
     let selectBox = document.createElement("div");
     let repSelect = document.createElement("select");
@@ -145,33 +144,72 @@ function displayReps() {
     stateBox.classList = "column is-offset-6";
     selectBox.classList = "select is-danger is-rounded is-normal is-focused";
     repSelect.setAttribute("id", "rep-select");
-    nilOption.textContent = "Select Representitive";
+    nilOption.textContent = "Select Member";
 
     selectBar.appendChild(selectBox);
     selectBox.appendChild(repSelect);
     repSelect.appendChild(nilOption);
 
-    fetch(osUrl + "&method=getLegislators&id=" + state + osApiKey)
-        .then(function(response) {
+    fetch(ppUrl + chamber + "/" + state + "/current.json", {
+        method: "GET",
+        headers: {"X-API-Key" : ppApiKey} 
+        }).then(function(response) {
             return response.json();
         }).then(function(data) {
             console.log(data)
-            let delegates = data.response.legislator.length;
-            for (i=0; i<delegates; i++) {
-                let legislator = Object.values(data.response.legislator[i]);
+            //let delegates = data.response.legislator.length;
+            for (i=0; i<data.results.length; i++) {
+                //let legislator = Object.values(data.response.legislator[i]);
                 let repOption = document.createElement("option");
-                repOption.setAttribute("value", legislator[0].cid);
-                repOption.setAttribute("id", i);
-                repOption.textContent = legislator[0].firstlast;
+                repOption.setAttribute("value", data.results[i].id);
+                //repOption.setAttribute("id", i);
+                repOption.textContent = data.results[i].name;
                 repSelect.appendChild(repOption);
             }
             selectBox.addEventListener("change", (event) => {
-                let chamber = returnChamber(event.target, delegates);
-                repBios(event.target.value, chamber);
+                //let chamber = returnChamber(event.target, delegates);
+                voteRecord(event.target.value);
             });
         })  
 }
 
+function displayChamber() {
+    //selectBar.removeChild(selectBar.lastChild);
+
+    let state = stateSelect.value;
+
+    let chamberBox = document.createElement("div");
+    chamberBox.classList = "column is-offset-6";
+    
+    let selectDiv = document.createElement("div");
+    selectDiv.classList = "select is-danger is-rounded is-normal is-focused";
+    
+    let chamberSelect = document.createElement("select");
+    chamberSelect.setAttribute("id", "chamber-select");
+
+    let noOption = document.createElement("option");
+    noOption.textContent = "Select Chamber";
+
+    let senateOption = document.createElement("option");
+    senateOption.textContent = "Senate";
+    senateOption.setAttribute("value", "senate");
+
+    let houseOption = document.createElement("option");
+    houseOption.textContent = "House of Representatives";
+    houseOption.setAttribute("value", "house");
+
+    selectBar.appendChild(selectDiv);
+    selectDiv.appendChild(chamberSelect);
+    chamberSelect.appendChild(noOption);
+    chamberSelect.appendChild(senateOption);
+    chamberSelect.appendChild(houseOption);
+
+    selectDiv.addEventListener("change", (event) => {
+        let chamber = event.target.value;
+        displayReps(state, chamber);
+    })
+}
+
 //voteRecord();
-stateSelect.addEventListener('change', (event) => {displayReps();});
+stateSelect.addEventListener('change', (event) => {displayChamber();});
 
