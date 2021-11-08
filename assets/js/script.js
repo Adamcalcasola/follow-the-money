@@ -12,44 +12,69 @@ let delegationEl = document.querySelector("#map");
 let voteRecordEl = document.getElementById("state-box");
 let selectBar = document.getElementById("select-bar");
 
+function returnChamber(a, b) {
+    console.log(a);
+    console.log(b);
+    if (a < b - 2) {
+        let chamber = "house"
+        return chamber;
+    } else {
+        let chamber = "senate"
+        return chamber;
+    }
+}
+
+function returnMemberId(cid, data) {
+    for (i=0;i<data.results[0].members.length;i++) {
+        if (cid === data.results[0].members[i].crp_id) {
+            let memberId = data.results[0].members[i].id;
+            return memberId;
+        }
+    }
+}
+
 function voteRecord(cid) {
-    console.log(cid);
-    
-    
-    
-    
-    
-    fetch(bbb, {
+    //console.log(cid);
+    fetch("https://api.propublica.org/congress/v1/117/" + "senate" + "/members.json", {
         method: "GET",
         headers: {"X-API-Key" : ppApiKey}
-    })
-    .then(function(response) {
+    }).then(function(response) {
         return response.json();
     }).then(function(data) {
-        for (i=0;i<data.results[0].votes.length;i++) {
-        //console.log(data.results[0].votes[i].description);
-        //console.log(data.results[0].votes[i].position);
-        let container = document.createElement("div");
-        let column1 = document.createElement("div");
-        let column2 = document.createElement("div");
-        let billDesc = document.createElement("div");
-        let position = document.createElement("div");
-        billDesc.textContent = data.results[0].votes[i].description;
-        position.textContent = data.results[0].votes[i].position;
-        voteRecordEl.appendChild(container);
-        container.appendChild(column1);
-        container.appendChild(column2);
-        column1.appendChild(billDesc);
-        column2.appendChild(position);
-        }
+        //console.log(data);
+        let memberId = returnMemberId(cid, data);
+        
+        fetch(ppUrl + memberId + "/votes.json", {
+            method: "GET",
+            headers: {"X-API-Key" : ppApiKey}
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            console.log(data);
+            for (i=0;i<data.results[0].votes.length;i++) {
+                //console.log(data.results[0].votes[i].description);
+                //console.log(data.results[0].votes[i].position);
+                let container = document.createElement("div");
+                let column1 = document.createElement("div");
+                let column2 = document.createElement("div");
+                let billDesc = document.createElement("div");
+                let position = document.createElement("div");
+                billDesc.textContent = data.results[0].votes[i].description;
+                position.textContent = data.results[0].votes[i].position;
+                voteRecordEl.appendChild(container);
+                container.appendChild(column1);
+                container.appendChild(column2);
+                column1.appendChild(billDesc);
+                column2.appendChild(position);
+            }
+        })
     })
 }
 
-function repBios(data) {
-    //console.log(data);
-    voteRecord(data);
+function repBios(cid, chamber) {
+    console.log(chamber);
     delegationEl.innerHTML = "";
-    fetch(osUrl + "&method=candIndustry&cid=" + data + "&cycle=2021" + osApiKey)
+    fetch(osUrl + "&method=candIndustry&cid=" + cid + "&cycle=2021" + osApiKey)
         .then(function(response) {
             return response.json();
         }).then(function(data) {
@@ -90,6 +115,7 @@ function repBios(data) {
             column2.appendChild(contributionsTitle);            
 
             for (i=0;i<data.response.industries.industry.length;i++) {
+                
                 let objData = Object.values(data.response.industries.industry[i]);
                 let industry = document.createElement("p");
                 let contributions = document.createElement("p");
@@ -99,7 +125,10 @@ function repBios(data) {
 
                 column1.appendChild(industry);
                 column2.appendChild(contributions);
+
             }
+            //let objAttr = Object.values(data.response.industries);
+            voteRecord(cid);
         })
 }
 
@@ -126,15 +155,19 @@ function displayReps() {
         .then(function(response) {
             return response.json();
         }).then(function(data) {
-            for (i=0; i<data.response.legislator.length; i++) {
+            console.log(data)
+            let delegates = data.response.legislator.length;
+            for (i=0; i<delegates; i++) {
                 let legislator = Object.values(data.response.legislator[i]);
                 let repOption = document.createElement("option");
                 repOption.setAttribute("value", legislator[0].cid);
+                repOption.setAttribute("id", i);
                 repOption.textContent = legislator[0].firstlast;
                 repSelect.appendChild(repOption);
             }
             selectBox.addEventListener("change", (event) => {
-                repBios(event.target.value);
+                let chamber = returnChamber(event.target, delegates);
+                repBios(event.target.value, chamber);
             });
         })  
 }
