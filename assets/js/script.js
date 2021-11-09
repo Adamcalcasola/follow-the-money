@@ -93,6 +93,8 @@ function repBios(state) {
                 container.className = "columns";
                 column1.className = "column";
                 column2.className = "column";
+                cycle.className = "cycle";
+                name.className = "rep-name";
                 
                 name.textContent = objBios[0].cand_name;
                 cycle.textContent = "Cycle Year: " + objBios[0].cycle;
