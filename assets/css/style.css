@@ -46,3 +46,9 @@ a {
     display: block;
     color: red;
 }
+#subtitle {
+    font-style: italic;
+}
+#vote-box {
+    display: none;
+}
