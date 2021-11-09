@@ -9,12 +9,21 @@
     opacity: .75;
 }
 
+
+#state-box {
+    text-align: center;
+}
 .board {
     margin: 30px;
     border: solid;
     padding: 10px;
     border-radius: 10px;
     background-color: white;
+    width: 600px;
+}
+
+h2 {
+    text-decoration: underline;
 }
 
 .name {
