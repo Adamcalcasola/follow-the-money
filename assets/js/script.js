@@ -58,7 +58,7 @@ function voteRecord(id, state) {
                 column2.appendChild(position);
             }
         })
-        repBios(state);
+        //repBios(state);
     //})
 }
 
@@ -69,62 +69,63 @@ function repBios(state) {
             return response.json();
         }).then(function(data) {
             console.log(data);
-            let legislator = Object.values(data.response.legislator[i]);
-            let cid = data;
-        })
-    fetch(osUrl + "&method=candIndustry&cid=" + cid + "&cycle=2021" + osApiKey)
-        .then(function(response) {
-            return response.json();
-        }).then(function(data) {
-            console.log(data);
-            let objBios = Object.values(data.response.industries);
-            let box = document.createElement("div");
-            let name = document.createElement("div");
-            let cycle = document.createElement("div");
-            let updated = document.createElement("div");
-            let origin = document.createElement("div");
-            let container = document.createElement("div");
-            let column1 = document.createElement("div");
-            let column2 = document.createElement("div");
-            let industryTitle = document.createElement("h2");
-            let contributionsTitle = document.createElement("h2");
-
-            box.className = "board";
-            container.className = "columns";
-            column1.className = "column";
-            column2.className = "column";
-
-            name.textContent = objBios[0].cand_name;
-            cycle.textContent = "Cycle Year: " + objBios[0].cycle;
-            updated.textContent = "Last Updated: " + objBios[0].last_updated;
-            origin.textContent = "Origin: " + objBios[0].origin;
-            industryTitle.textContent = "Industry:";
-            contributionsTitle.textContent = "Total Contributions:";
-
-            delegationEl.appendChild(box);
-            box.appendChild(name);
-            box.appendChild(cycle);
-            box.appendChild(updated);
-            box.appendChild(origin);
-            box.appendChild(container);
-            container.appendChild(column1);
-            container.appendChild(column2);
-            column1.appendChild(industryTitle);
-            column2.appendChild(contributionsTitle);            
-
-            for (i=0;i<data.response.industries.industry.length;i++) {
+            let legislator = Object.values(data.response.legislator[2]);
+            let cid = legislator[0].cid;
+            console.log(cid);
+            fetch(osUrl + "&method=candIndustry&cid=" + cid + "&cycle=2021" + osApiKey)
+            .then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                console.log(data);
+                let objBios = Object.values(data.response.industries);
+                let box = document.createElement("div");
+                let name = document.createElement("div");
+                let cycle = document.createElement("div");
+                let updated = document.createElement("div");
+                let origin = document.createElement("div");
+                let container = document.createElement("div");
+                let column1 = document.createElement("div");
+                let column2 = document.createElement("div");
+                let industryTitle = document.createElement("h2");
+                let contributionsTitle = document.createElement("h2");
                 
-                let objData = Object.values(data.response.industries.industry[i]);
-                let industry = document.createElement("p");
-                let contributions = document.createElement("p");
+                box.className = "board";
+                container.className = "columns";
+                column1.className = "column";
+                column2.className = "column";
                 
-                industry.textContent = objData[0].industry_name + ": ";
-                contributions.textContent = "$" + objData[0].total;
-
-                column1.appendChild(industry);
-                column2.appendChild(contributions);
-
-            }
+                name.textContent = objBios[0].cand_name;
+                cycle.textContent = "Cycle Year: " + objBios[0].cycle;
+                updated.textContent = "Last Updated: " + objBios[0].last_updated;
+                origin.textContent = "Origin: " + objBios[0].origin;
+                industryTitle.textContent = "Industry:";
+                contributionsTitle.textContent = "Total Contributions:";
+                
+                delegationEl.appendChild(box);
+                box.appendChild(name);
+                box.appendChild(cycle);
+                box.appendChild(updated);
+                box.appendChild(origin);
+                box.appendChild(container);
+                container.appendChild(column1);
+                container.appendChild(column2);
+                column1.appendChild(industryTitle);
+                column2.appendChild(contributionsTitle);            
+                
+                for (i=0;i<data.response.industries.industry.length;i++) {
+                    
+                    let objData = Object.values(data.response.industries.industry[i]);
+                    let industry = document.createElement("p");
+                    let contributions = document.createElement("p");
+                    
+                    industry.textContent = objData[0].industry_name + ": ";
+                    contributions.textContent = "$" + objData[0].total;
+                    
+                    column1.appendChild(industry);
+                    column2.appendChild(contributions);
+                    
+                }
+            })
             //let objAttr = Object.values(data.response.industries);
             //repBios(cid);
         })
@@ -168,7 +169,7 @@ function displayReps(state, chamber) {
             }
             selectBox.addEventListener("change", (event) => {
                 //let chamber = returnChamber(event.target, delegates);
-                voteRecord(event.target.value,state);
+                voteRecord(event.target.value,state), repBios(state);
             });
         })  
 }
