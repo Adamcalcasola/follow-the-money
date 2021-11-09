@@ -8,6 +8,7 @@ let voteRecordEl = document.getElementById("state-box");
 let selectBar = document.getElementById("select-bar");
 
 function voteRecord(id) {
+    voteRecordEl.innerHTML = "";
     fetch(ppUrl + id + "/votes.json", {
         method: "GET",
         headers: {
