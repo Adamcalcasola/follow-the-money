@@ -63,7 +63,7 @@ function getSenateMemberId() {
 
 
 
-function voteRecord() {
+function voteRecord(houseMemberId) {
     // console.log(cid);
     
     fetch(houseProUrlA, + houseMemberId + "/votes.json", {method: "GET", headers: {"X-API-Key" : ppApiKey}} )
@@ -185,5 +185,5 @@ function displayReps() {
 
 //voteRecord();
 getHouseMemberId();
-getSenateMemberId();
+// getSenateMemberId();
 stateSelect.addEventListener('change', (event) => {displayReps();});
