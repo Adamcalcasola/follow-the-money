@@ -9,6 +9,10 @@
     opacity: .75;
 }
 
+
+#state-box {
+    text-align: center;
+}
 .board {
     margin: 30px;
     border: solid red;
