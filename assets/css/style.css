@@ -53,6 +53,16 @@ a {
 #subtitle {
     font-style: italic;
 }
+
 #vote-box {
-    display: none;
+    margin: 30px;
+    border: solid red;
+    padding: 10px;
+    border-radius: 10px;
+    width: 600px;
+    color: black;
+    text-align: center;
+    background-color: rgb(255, 240, 247);
+    font-size: 14px;
+    justify-content: center;
 }
