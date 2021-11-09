@@ -48,10 +48,10 @@ function voteRecord(id) {
             totalVoteNV.className = "totalVoteNV";
             
             billDescTitle.textContent = "Description"
-            billDesc.textContent = "" + data.results[0].votes[i].description;
+            billDesc.textContent = data.results[0].votes[i].description;
 
             positionTitle.textContent = "Position";
-            position.textContent = "" + data.results[0].votes[i].position;
+            position.textContent = data.results[0].votes[i].position;
 
             totalVote.textContent = "Total Vote Count";
             totalVoteYes.textContent = "Yes : " + data.results[0].votes[i].total.yes;
