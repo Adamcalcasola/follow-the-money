@@ -132,7 +132,7 @@ function repBios(state) {
 
 function displayReps(state, chamber) {
     //delegationEl.innerHTML = "";
-
+    console.log(state);
     //selectBar.removeChild(selectBar.lastChild);
 
     //let state = stateSelect.value;
@@ -168,7 +168,7 @@ function displayReps(state, chamber) {
             }
             selectBox.addEventListener("change", (event) => {
                 //let chamber = returnChamber(event.target, delegates);
-                voteRecord(event.target.value);
+                voteRecord(event.target.value,state);
             });
         })  
 }
