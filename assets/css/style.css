@@ -55,8 +55,7 @@ a {
 }
 
 #vote-box {
-    margin: 30px;
-    display:inline-block;
+    margin: auto;
     border: solid red;
     padding: 10px;
     border-radius: 10px;
