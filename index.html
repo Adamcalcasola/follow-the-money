@@ -28,7 +28,12 @@
     </section>
 
     <!-- Dropdown select button -->
-    <div id="select-bar" class="column is-offset-4">
+    <div id="select-bar" class="column is-offset-3">
+        <div id="saved-select" class="select is-danger is-rounded is-normal is-focused">
+            <select id = "saved-search">
+                <option value="saved-searches">Saved Searches</option>
+            </select>
+        </div>
         <div id="state-select" class="select is-danger is-rounded is-normal is-focused">
             <select id = "state">
                 <option value="Select State">Select State</option>
@@ -87,22 +92,23 @@
     </div>  
 
     <!--picture of USA map-->
-    <div id="map">
-
-    </div>
-
+    <div id="vote-display">
+        <div id="map">
+        
+        </div>
+    </div>  
     <!--Popup for CT and display will be "none"-->
-    <div class="card is-fluid is-danger" id="state-box">
-        <!--<h1 class="senators">Senators</h1>
+    <!--<div class="card is-fluid is-danger" id="state-box">
+        <h1 class="senators">Senators</h1>
         <h2 id="senator-one">Senator-1</h2>
-        <h2 id="senator-two">Senator-2</h2>-->
-    </div>
+        <h2 id="senator-two">Senator-2</h2>
+    </div>-->
 
 
     <!--box that contains the selected reps vote history-->
-    <div class="column is-fluid is-danger" id="vote-box">
+    <!--<div class="column is-fluid is-danger board" id="vote-box">
 
-    </div>
+    </div>-->
     
     <!-- Footer -->
     <footer class="footer">
