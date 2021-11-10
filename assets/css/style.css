@@ -35,13 +35,12 @@
     color: rgb(15, 33, 136);
 }
 
+
 h2 {
+    font-weight: bold;
     text-decoration: underline;
 }
 
-h2 {
-    text-decoration: underline;
-}
 .name {
     text-align: center;
 }
@@ -50,9 +49,21 @@ a {
     display: block;
     color: red;
 }
+
 #subtitle {
     font-style: italic;
 }
+
 #vote-box {
-    display: none;
+    margin: 30px;
+    display:inline-block;
+    border: solid red;
+    padding: 10px;
+    border-radius: 10px;
+    width: 600px;
+    color: black;
+    text-align: center;
+    background-color: rgb(255, 240, 247);
+    font-size: 14px;
+    justify-content: center;
 }
