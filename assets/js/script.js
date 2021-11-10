@@ -70,13 +70,9 @@ function repBios(id) {
                 container.className = "columns";
                 column1.className = "column";
                 column2.className = "column";
-<<<<<<< HEAD
-
-=======
                 cycle.className = "cycle";
                 name.className = "rep-name";
                 
->>>>>>> bf484f83fcdda33ea4e42cabeff64dd577b5b4e6
                 name.textContent = objBios[0].cand_name;
                 cycle.textContent = "Cycle Year: " + objBios[0].cycle;
                 updated.textContent = "Last Updated: " + objBios[0].last_updated;
