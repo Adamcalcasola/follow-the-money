@@ -39,7 +39,7 @@ function voteRecord(id) {
             let positionTitle = document.createElement("h2");
             let totalVote = document.createElement("h2");
             
-            box2.class = "board";
+            box2.className = "board";
             container.className = "columns";
             column1.className = "column";
             column2.className = "column";
@@ -64,9 +64,9 @@ function voteRecord(id) {
             totalVoteNo.textContent = "No: " + data.results[0].votes[i].total.no;
             totalVoteNV.textContent = "Not Voting: " + data.results[0].votes[i].total.not_voting;
             
-            voteBox.appendChild(box2);
+            // voteBox.appendChild(box2);
             
-            box2.appendChild(container);
+            voteBox.appendChild(container);
             container.appendChild(column1);
             container.appendChild(column2);
             container.appendChild(column3);
