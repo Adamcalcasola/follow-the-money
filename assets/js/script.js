@@ -4,8 +4,9 @@ let osUrl = "http://www.opensecrets.org/api/?output=json";
 let ppUrl = "https://api.propublica.org/congress/v1/members/";
 let stateSelect = document.querySelector("#state");
 let delegationEl = document.querySelector("#map");
-let voteRecordEl = document.getElementById("state-box");
+let voteRecordEl = document.getElementById("vote-box");
 let selectBar = document.getElementById("select-bar");
+
 
 function voteRecord(id) {
     voteRecordEl.innerHTML = "";
@@ -22,15 +23,59 @@ function voteRecord(id) {
             let container = document.createElement("div");
             let column1 = document.createElement("div");
             let column2 = document.createElement("div");
+            let column3 = document.createElement("div");
+            let billDescTitle = document.createElement("h2");
             let billDesc = document.createElement("div");
+            let positionTitle = document.createElement("h2");
             let position = document.createElement("div");
+            let totalVote = document.createElement("h2");
+            let totalVoteYes = document.createElement("div");
+            let totalVoteNo = document.createElement("div");
+            let totalVoteNV = document.createElement("div");
+
+            
+            container.className = "columns";
+            column1.className = "column";
+            column2.className = "column";
+            column3.className = "column";
+            billDescTitle.className = "billDescTitle";
+            billDesc.className = "billDesc";
+            positionTitle.className = "positionTitle"
+            position.className = "position";
+            totalVote.className = "totalvote";
+            totalVoteYes.className = "totalVoteYes";
+            totalVoteNo.className =  "totalVoteNo";
+            totalVoteNV.className = "totalVoteNV";
+            
+            billDescTitle.textContent = "Description"
             billDesc.textContent = data.results[0].votes[i].description;
+
+            positionTitle.textContent = "Position";
             position.textContent = data.results[0].votes[i].position;
+
+            totalVote.textContent = "Total Vote Count";
+            totalVoteYes.textContent = "Yes : " + data.results[0].votes[i].total.yes;
+            totalVoteNo.textContent = "No: " + data.results[0].votes[i].total.no;
+            totalVoteNV.textContent = "Not Voting: " + data.results[0].votes[i].total.not_voting;
+
             voteRecordEl.appendChild(container);
+
             container.appendChild(column1);
             container.appendChild(column2);
+            container.appendChild(column3);
+
+            column1.appendChild(billDescTitle);
             column1.appendChild(billDesc);
+
+            column2.appendChild(positionTitle);
             column2.appendChild(position);
+
+            column3.appendChild(totalVote);
+            column3.appendChild(totalVoteYes);
+            column3.appendChild(totalVoteNo);
+            column3.appendChild(totalVoteNV);
+   
+            
         }
     })
 }
@@ -70,13 +115,9 @@ function repBios(id) {
                 container.className = "columns";
                 column1.className = "column";
                 column2.className = "column";
-<<<<<<< HEAD
-
-=======
                 cycle.className = "cycle";
                 name.className = "rep-name";
                 
->>>>>>> bf484f83fcdda33ea4e42cabeff64dd577b5b4e6
                 name.textContent = objBios[0].cand_name;
                 cycle.textContent = "Cycle Year: " + objBios[0].cycle;
                 updated.textContent = "Last Updated: " + objBios[0].last_updated;
