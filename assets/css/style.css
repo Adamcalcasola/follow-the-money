@@ -77,4 +77,5 @@ a {
     text-align: center;
     background-color: rgb(255, 240, 247);
     font-size: 14px;
+    justify-content: center;
 }
