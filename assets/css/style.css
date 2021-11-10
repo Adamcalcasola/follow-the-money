@@ -1,3 +1,5 @@
+
+
 #map {
     background-image: url('17-170115_blue-us-map-png.png');
     background-repeat: no-repeat;
@@ -6,12 +8,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     opacity: .75;
 }
 
 
 #state-box {
+    margin: 30px;
+    display:inline-block;
+    border: solid red;
+    padding: 10px;
+    border-radius: 10px;
+    width: 600px;
+    color: black;
     text-align: center;
+    background-color: rgb(255, 240, 247);
+    font-size: 14px;
+    justify-content: center;
 }
 .board {
     margin: 30px;
@@ -64,5 +77,4 @@ a {
     text-align: center;
     background-color: rgb(255, 240, 247);
     font-size: 14px;
-    justify-content: center;
 }
