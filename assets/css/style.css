@@ -7,7 +7,6 @@
     height: 500px;
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
     opacity: .75;
 }
@@ -33,7 +32,10 @@
     border-radius: 10px;
     width: 600px;
     color: black;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /*text-align: center;*/
     background-color: rgb(255, 240, 247);
     font-size: 14px;
 }

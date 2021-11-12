@@ -12,7 +12,7 @@ voteBox.classList = "column is-fluid is-danger board";
 voteBox.setAttribute("id", "vote-box");
 
 function voteRecord(id) {
-    voteBox.innerHTML = "";
+    delegationEl.innerHTML = "";
     fetch(ppUrl + id + "/votes.json", {
         method: "GET",
         headers: {
@@ -22,7 +22,7 @@ function voteRecord(id) {
         return response.json();
     }).then(function (data) {
         console.log(data);
-        voteDisplay.append(voteBox);
+        //voteDisplay.append(voteBox);
 
         for (i = 0; i < data.results[0].votes.length; i++) {
             let box2 = document.createElement("div");
@@ -66,7 +66,8 @@ function voteRecord(id) {
             
             // voteBox.appendChild(box2);
             
-            voteBox.appendChild(container);
+            delegationEl.appendChild(box2);
+            box2.appendChild(container);
             container.appendChild(column1);
             container.appendChild(column2);
             container.appendChild(column3);
@@ -82,7 +83,55 @@ function voteRecord(id) {
     })
 }
 
-function repBios(id) {
+function repBio(id) {
+    fetch(ppUrl + id + ".json", {
+        method: "GET",
+        headers: {"X-API-Key": ppApiKey}
+    }).then(function (response) {
+        return response.json();
+    }).then(function (data) {
+    console.log(data);
+    delegationEl.innerHTML = "";
+    let bioBox = document.createElement("div");
+    bioBox.classList = "board";
+    
+    let memberId = data.results[0].id;
+    let firstName = data.results[0].first_name;
+    let lastName = data.results[0].last_name;
+
+    let repName = document.createElement("h1");
+    repName.textContent = "Name: " + firstName + " " + lastName;
+
+    let birthdate = document.createElement("h1");
+    birthdate.textContent = "Date of Birth: " + data.results[0].date_of_birth;
+
+    let title = document.createElement("h1");
+    title.textContent = "Title: " + data.results[0].roles[0].title;
+
+    let industryBtn = document.createElement("button");
+    industryBtn.classList = "button is-danger is-rounded is-normal is-focused";
+    industryBtn.textContent = "Top Campaign Contributions by Industry";
+    industryBtn.addEventListener("click", (event) => {
+        industryContributions(memberId);
+    });
+
+    let votesBtn = document.createElement("button");
+    votesBtn.classList = "button is-danger is-rounded is-normal is-focused";
+    votesBtn.textContent = "Last 20 Vote Positions";
+    votesBtn.addEventListener("click", (event) => {
+        voteRecord(memberId);
+    })
+
+    delegationEl.appendChild(bioBox);
+    bioBox.appendChild(repName);
+    bioBox.appendChild(title);
+    bioBox.appendChild(birthdate);
+    bioBox.appendChild(industryBtn);
+    bioBox.appendChild(votesBtn);
+    })
+}
+
+function industryContributions(id) {
     delegationEl.innerHTML = "";
     fetch(ppUrl + id + ".json", {
         method: "GET",
@@ -187,7 +236,7 @@ function displayReps(state, chamber) {
             repSelect.appendChild(repOption);
         }
         selectBox.addEventListener("change", (event) => {
-            repBios(event.target.value), voteRecord(event.target.value);
+            repBio(event.target.value); //voteRecord(event.target.value);
         });
     })
 }
