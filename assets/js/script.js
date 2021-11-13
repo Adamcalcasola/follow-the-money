@@ -1,6 +1,6 @@
 let osApiKey = "&apikey=57bf365637e080dcba9bad64d8d27cd9";
 let ppApiKey = "kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
-let osUrl = "http://www.opensecrets.org/api/?output=json";
+let osUrl = "https://www.opensecrets.org/api/?output=json";
 let ppUrl = "https://api.propublica.org/congress/v1/members/";
 let stateSelect = document.getElementById("state");
 let delegationEl = document.getElementById("map");
@@ -96,7 +96,7 @@ function repBios(id) {
         let cid = data.results[0].crp_id;
         //some members of congress do not have crpids(e.g. Sen. Alex Padilla CA)
         //console.log(cid);
-        fetch(osUrl + "&method=candIndustry&cid=" + cid + "&cycle=2021" + osApiKey)
+        fetch(osUrl + "&method=candIndustry&cid=" + cid + "&cycle=2021",  + osApiKey)
             .then(function (response) {
                 return response.json();
             }).then(function (data) {
