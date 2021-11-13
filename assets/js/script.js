@@ -96,7 +96,7 @@ function repBios(id) {
         let cid = data.results[0].crp_id;
         //some members of congress do not have crpids(e.g. Sen. Alex Padilla CA)
         //console.log(cid);
-        fetch(osUrl + "&method=candIndustry&cid=" + cid + "&cycle=2021",  + osApiKey)
+        fetch(osUrl + "&method=candIndustry&cid=" + cid + "&cycle=2021" + osApiKey)
             .then(function (response) {
                 return response.json();
             }).then(function (data) {
