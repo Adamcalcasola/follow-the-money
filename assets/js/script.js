@@ -2,6 +2,7 @@ let osApiKey = "&apikey=57bf365637e080dcba9bad64d8d27cd9";
 let ppApiKey = "kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
 let osUrl = "http://www.opensecrets.org/api/?output=json";
 let ppUrl = "https://api.propublica.org/congress/v1/members/";
+let ppUrl2 = "https://api.propublica.org/congress/v1/bills/search.json?query=";
 let stateSelect = document.getElementById("state");
 let delegationEl = document.getElementById("map");
 let voteRecordEl = document.getElementById("vote-box");
@@ -10,6 +11,26 @@ let voteDisplay = document.getElementById("vote-display");
 let voteBox = document.createElement("div");
 voteBox.classList = "column is-fluid is-danger board";
 voteBox.setAttribute("id", "vote-box");
+
+
+
+function searchBills(input) {
+    console.log(input);
+    fetch(ppUrl2 + input, {
+        method: "GET",
+        headers: {
+            "X-API-Key": ppApiKey
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (data) {
+        console.log(data);
+        for (i=0;i<10;i++) {
+            let billId = data.results[0].bills[i].bill_id;
+            console.log(billId);
+        }
+    })
+}
 
 function voteRecord(id) {
     delegationEl.innerHTML = "";
@@ -41,9 +62,9 @@ function voteRecord(id) {
             
             box2.className = "board";
             container.className = "columns";
-            column1.className = "column";
-            column2.className = "column";
-            column3.className = "column";
+            column1.classList = "column";
+            column2.classList = "column";
+            column3.classList = "column";
             billDescTitle.className = "billDescTitle";
             positionTitle.className = "positionTitle"
             totalVote.className = "totalvote";
@@ -95,6 +116,18 @@ function repBio(id) {
     let bioBox = document.createElement("div");
     bioBox.classList = "board";
     
+    let billSearch = document.createElement("input");
+    billSearch.setAttribute("type", "search");
+    billSearch.setAttribute("id", "bill-search");
+
+    let searchBtn = document.createElement("button");
+    searchBtn.setAttribute("id", "search-btn");
+    searchBtn.textContent = "Search";
+
+    searchBtn.addEventListener("click", (event) => {
+        searchBills(billSearch.value);
+    });
+
     let memberId = data.results[0].id;
     let firstName = data.results[0].first_name;
     let lastName = data.results[0].last_name;
@@ -126,6 +159,8 @@ function repBio(id) {
     bioBox.appendChild(repName);
     bioBox.appendChild(title);
     bioBox.appendChild(birthdate);
+    bioBox.appendChild(billSearch);
+    bioBox.appendChild(searchBtn);
     bioBox.appendChild(industryBtn);
     bioBox.appendChild(votesBtn);
     })
@@ -272,6 +307,8 @@ function displayChamber(state) {
         displayReps(state, event.target.value);
     })
 }
+
+
 
 stateSelect.addEventListener('change', (event) => {
     displayChamber(event.target.value);

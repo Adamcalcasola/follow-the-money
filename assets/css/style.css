@@ -1,13 +1,14 @@
 
 
 #map {
-    background-image: url('17-170115_blue-us-map-png.png');
+    /* background-image: url('17-170115_blue-us-map-png.png');
     background-repeat: no-repeat;
     background-position: center;
-    height: 500px;
+    height: 500px; */
     display: flex;
     align-items: center;
     flex-direction: column;
+    padding: 30px;
     opacity: .75;
 }
 
@@ -18,23 +19,29 @@
     border: solid red;
     padding: 10px;
     border-radius: 10px;
-    width: 600px;
+    width: 100%;
     color: black;
     text-align: center;
     background-color: rgb(255, 240, 247);
     font-size: 14px;
     justify-content: center;
 }
+
+/* .column {
+    text-align: center;
+} */
+
 .board {
     margin: 30px;
     border: solid red;
     padding: 10px;
     border-radius: 10px;
-    width: 600px;
+    width: 100%;
     color: black;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex-basis: 50%;
     /*text-align: center;*/
     background-color: rgb(255, 240, 247);
     font-size: 14px;
@@ -42,6 +49,7 @@
 .cycle {
     font-size: 18px;
 }
+
 .rep-name {
     font-weight: bold;
     text-align: center;
@@ -80,4 +88,10 @@ a {
     background-color: rgb(255, 240, 247);
     font-size: 14px;
     justify-content: center;
+}
+
+@media screen and (max-width: 700px) {
+    #map {
+        background-image: url("");
+    }
 }
