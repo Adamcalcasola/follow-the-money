@@ -32,16 +32,17 @@
 } */
 
 .board {
-    margin: 30px;
+    /* margin: 30px; */
     border: solid red;
     padding: 10px;
     border-radius: 10px;
-    width: 100%;
+    width: 50%;
     color: black;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    flex-basis: 50%;
+    flex-basis: auto;
+    text-align: center;
     /*text-align: center;*/
     background-color: rgb(255, 240, 247);
     font-size: 14px;

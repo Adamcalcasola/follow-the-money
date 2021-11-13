@@ -1,6 +1,6 @@
 let osApiKey = "&apikey=57bf365637e080dcba9bad64d8d27cd9";
 let ppApiKey = "kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
-let osUrl = "http://www.opensecrets.org/api/?output=json";
+let osUrl = "https://www.opensecrets.org/api/?output=json";
 let ppUrl = "https://api.propublica.org/congress/v1/members/";
 let ppUrl2 = "https://api.propublica.org/congress/v1/bills/search.json?query=";
 let stateSelect = document.getElementById("state");
@@ -9,10 +9,10 @@ let voteRecordEl = document.getElementById("vote-box");
 let selectBar = document.getElementById("select-bar");
 let voteDisplay = document.getElementById("vote-display");
 let voteBox = document.createElement("div");
+let bioBox = document.createElement("div");
+bioBox.classList = "board";
 voteBox.classList = "column is-fluid is-danger board";
 voteBox.setAttribute("id", "vote-box");
-
-
 
 function searchBills(input) {
     console.log(input);
@@ -111,41 +111,72 @@ function repBio(id) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
-    console.log(data);
-    delegationEl.innerHTML = "";
-    let bioBox = document.createElement("div");
-    bioBox.classList = "board";
+    //console.log(data);
+    let state = data.results[0].roles[0].state;
+    getLegislators(state);
     
-    let billSearch = document.createElement("input");
-    billSearch.setAttribute("type", "search");
-    billSearch.setAttribute("id", "bill-search");
+    
+    delegationEl.innerHTML = "";
+    bioBox.innerHTML = "";
+    
+    // let billSearch = document.createElement("input");
+    // billSearch.setAttribute("type", "search");
+    // billSearch.setAttribute("id", "bill-search");
 
-    let searchBtn = document.createElement("button");
-    searchBtn.setAttribute("id", "search-btn");
-    searchBtn.textContent = "Search";
+    // let searchBtn = document.createElement("button");
+    // searchBtn.setAttribute("id", "search-btn");
+    // searchBtn.textContent = "Search";
 
-    searchBtn.addEventListener("click", (event) => {
-        searchBills(billSearch.value);
-    });
+    // searchBtn.addEventListener("click", (event) => {
+    //     searchBills(billSearch.value);
+    // });
 
     let memberId = data.results[0].id;
     let firstName = data.results[0].first_name;
     let lastName = data.results[0].last_name;
+    let repUrl = data.results[0].url;
 
     let repName = document.createElement("h1");
-    repName.textContent = "Name: " + firstName + " " + lastName;
+    repName.className = "rep-name";
+    repName.textContent = firstName + " " + lastName;
 
     let birthdate = document.createElement("h1");
     birthdate.textContent = "Date of Birth: " + data.results[0].date_of_birth;
 
     let title = document.createElement("h1");
+    title.className = "cycle";
     title.textContent = "Title: " + data.results[0].roles[0].title;
+
+    let urlLink = document.createElement("a");
+    urlLink.setAttribute("href", repUrl);
+    urlLink.textContent = repUrl;
+
+    let summaryBtn = document.createElement("button");
+    summaryBtn.classList = "button is-danger is-rounded is-normal is-focused";
+    summaryBtn.textContent = "Summary of Fundraising Information";
+    summaryBtn.addEventListener("click", (event) => {
+        candSummary(memberId);
+    });
+
+    let contribBtn = document.createElement("button");
+    contribBtn.classList = "button is-danger is-rounded is-normal is-focused";
+    contribBtn.textContent = "Top Campaign Contributors";
+    contribBtn.addEventListener("click", (event) => {
+        candContrib(memberId);
+    });
 
     let industryBtn = document.createElement("button");
     industryBtn.classList = "button is-danger is-rounded is-normal is-focused";
     industryBtn.textContent = "Top Campaign Contributions by Industry";
     industryBtn.addEventListener("click", (event) => {
-        industryContributions(memberId);
+        candIndustry(memberId);
+    });
+
+    let sectorBtn = document.createElement("button");
+    sectorBtn.classList = "button is-danger is-rounded is-normal is-focused";
+    sectorBtn.textContent = "Top Campaign Contributions by Sector";
+    sectorBtn.addEventListener("click", (event) => {
+        candSector(memberId);
     });
 
     let votesBtn = document.createElement("button");
@@ -159,15 +190,240 @@ function repBio(id) {
     bioBox.appendChild(repName);
     bioBox.appendChild(title);
     bioBox.appendChild(birthdate);
-    bioBox.appendChild(billSearch);
-    bioBox.appendChild(searchBtn);
+    bioBox.appendChild(urlLink);
+    //bioBox.appendChild(billSearch);
+    //bioBox.appendChild(searchBtn);
+    bioBox.appendChild(summaryBtn);
+    bioBox.appendChild(contribBtn);
     bioBox.appendChild(industryBtn);
+    bioBox.appendChild(sectorBtn);
     bioBox.appendChild(votesBtn);
     })
 }
 
-function industryContributions(id) {
-    delegationEl.innerHTML = "";
+function getLegislators(state) {
+    fetch(osUrl + "&method=getLegislators&id=" + state + osApiKey)
+        .then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            //console.log(data);
+            for (i=0;i<data.response.legislator.length;i++) {
+
+            }
+
+        });
+    }
+
+// Unfinished CID retrieval function for Open Secret calls
+// function getCid(id) {
+//         let cid = fetch(ppUrl + id + ".json", {
+//             method: "GET",
+//         headers: {
+//             "X-API-Key": ppApiKey
+//         }
+//     }).then(function (response) {
+//         return response.json();
+//     }).then(function (data) {
+//         console.log(data);
+//         let crp = data.results[0].crp_id;
+//         console.log(crp);
+//         return crp;
+//     })
+//     return cid;
+// }
+
+function candSummary(id) {
+    fetch(ppUrl + id + ".json", {
+        method: "GET",
+        headers: {
+            "X-API-Key": ppApiKey
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (data) {
+        //console.log(data);
+        let cid = data.results[0].crp_id;
+        //let id = data.results[0].id;
+        fetch(osUrl + "&method=candSummary&cid=" + cid + "&cycle=2021" + osApiKey)
+            .then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                console.log(data);
+                
+                delegationEl.innerHTML = "";
+                let objBios = Object.values(data.response.summary);
+                let box = document.createElement("div");
+                let name = document.createElement("div");
+                let cycle = document.createElement("div");
+                let updated = document.createElement("div");
+                let origin = document.createElement("div");
+                let container = document.createElement("div");
+                let column1 = document.createElement("div");
+                let column2 = document.createElement("div");
+                let title = document.createElement("h2");
+                let totals = document.createElement("h2");
+                let cashWords = document.createElement("p");
+                let cashOnHand = document.createElement("p");
+                let debtWords = document.createElement("p");
+                let debt = document.createElement("p");
+                let spentWords = document.createElement("p");
+                let spent = document.createElement("p");
+                let totalWords = document.createElement("p");
+                let total = document.createElement("p");
+                
+                let returnBtn = document.createElement("button");
+                returnBtn.classList = "button is-danger is-rounded is-normal is-focused";
+                returnBtn.textContent = "Return to Representitive Bio";
+                returnBtn.addEventListener("click", (event) => {
+                    repBio(id);
+                })
+
+                box.className = "board";
+                container.className = "columns";
+                column1.className = "column";
+                column2.className = "column";
+                cycle.className = "cycle";
+                name.className = "rep-name";
+                
+                name.textContent = objBios[0].cand_name;
+                cycle.textContent = "Cycle Year: " + objBios[0].cycle;
+                updated.textContent = "Last Updated: " + objBios[0].last_updated;
+                origin.textContent = "Origin: " + objBios[0].origin;
+                title.textContent = "Summary:";
+                totals.textContent = "Totals:";
+
+                cashWords.textContent = "Cash On Hand";
+                cashOnHand.textContent = "$" + objBios[0].cash_on_hand;
+                debtWords.textContent = "Debt"
+                debt.textContent = "$" + objBios[0].debt;
+                spentWords.textContent = "Spent"
+                spent.textContent = "$" + objBios[0].spent;
+                totalWords.textContent = "Total"
+                total.textContent = "$" + objBios[0].total;
+
+                delegationEl.appendChild(box);
+                box.appendChild(name);
+                box.appendChild(cycle);
+                box.appendChild(updated);
+                box.appendChild(origin);
+                box.appendChild(container);
+                box.appendChild(cashOnHand);
+                box.appendChild(debt);
+                box.appendChild(spent);
+                box.appendChild(total);
+                box.appendChild(returnBtn);
+                container.appendChild(column1);
+                container.appendChild(column2);
+                column1.appendChild(title);
+                column1.appendChild(cashWords);
+                column1.appendChild(debtWords);
+                column1.appendChild(spentWords);
+                column1.appendChild(totalWords);
+                column2.appendChild(totals);
+                column2.appendChild(cashOnHand);
+                column2.appendChild(debt);
+                column2.appendChild(spent);
+                column2.appendChild(total);
+
+                // for (i = 0; i < data.response.contributors.contributor.length; i++) {
+
+                //     let objData = Object.values(data.response.contributors.contributor[i]);
+                //     let contributor = document.createElement("p");
+                //     let contributions = document.createElement("p");
+
+                //     contributor.textContent = objData[0].org_name + ": ";
+                //     contributions.textContent = "$" + objData[0].total;
+
+                //     column1.appendChild(contributor);
+                //     column2.appendChild(contributions);
+                // }
+
+            })
+    })
+}
+
+function candContrib(id) {
+    fetch(ppUrl + id + ".json", {
+        method: "GET",
+        headers: {
+            "X-API-Key": ppApiKey
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (data) {
+        //console.log(data);
+        let cid = data.results[0].crp_id;
+        //let id = data.results[0].id;
+        fetch(osUrl + "&method=candContrib&cid=" + cid + "&cycle=2021" + osApiKey)
+            .then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                console.log(data);
+                
+                delegationEl.innerHTML = "";
+                let objBios = Object.values(data.response.contributors);
+                let box = document.createElement("div");
+                let name = document.createElement("div");
+                let cycle = document.createElement("div");
+                let updated = document.createElement("div");
+                let origin = document.createElement("div");
+                let container = document.createElement("div");
+                let column1 = document.createElement("div");
+                let column2 = document.createElement("div");
+                let title = document.createElement("h2");
+                let contributionsTitle = document.createElement("h2");
+                
+                let returnBtn = document.createElement("button");
+                returnBtn.classList = "button is-danger is-rounded is-normal is-focused";
+                returnBtn.textContent = "Return to Representitive Bio";
+                returnBtn.addEventListener("click", (event) => {
+                    repBio(id);
+                })
+
+                box.className = "board";
+                container.className = "columns";
+                column1.className = "column";
+                column2.className = "column";
+                cycle.className = "cycle";
+                name.className = "rep-name";
+                
+                name.textContent = objBios[0].cand_name;
+                cycle.textContent = "Cycle Year: " + objBios[0].cycle;
+                updated.textContent = "Last Updated: " + objBios[0].last_updated;
+                origin.textContent = "Origin: " + objBios[0].origin;
+                title.textContent = "Contributors:";
+                contributionsTitle.textContent = "Total Contributions:";
+
+                delegationEl.appendChild(box);
+                box.appendChild(name);
+                box.appendChild(cycle);
+                box.appendChild(updated);
+                box.appendChild(origin);
+                box.appendChild(container);
+                box.appendChild(returnBtn);
+                container.appendChild(column1);
+                container.appendChild(column2);
+                column1.appendChild(title);
+                column2.appendChild(contributionsTitle);
+
+                for (i = 0; i < data.response.contributors.contributor.length; i++) {
+
+                    let objData = Object.values(data.response.contributors.contributor[i]);
+                    let contributor = document.createElement("p");
+                    let contributions = document.createElement("p");
+
+                    contributor.textContent = objData[0].org_name + ": ";
+                    contributions.textContent = "$" + objData[0].total;
+
+                    column1.appendChild(contributor);
+                    column2.appendChild(contributions);
+                }
+
+            })
+    })
+}
+
+function candIndustry(id) {
     fetch(ppUrl + id + ".json", {
         method: "GET",
         headers: {
@@ -185,6 +441,7 @@ function industryContributions(id) {
                 return response.json();
             }).then(function (data) {
                 //console.log(data);
+                delegationEl.innerHTML = "";
                 let objBios = Object.values(data.response.industries);
                 let box = document.createElement("div");
                 let name = document.createElement("div");
@@ -194,9 +451,15 @@ function industryContributions(id) {
                 let container = document.createElement("div");
                 let column1 = document.createElement("div");
                 let column2 = document.createElement("div");
-                let industryTitle = document.createElement("h2");
+                let title = document.createElement("h2");
                 let contributionsTitle = document.createElement("h2");
 
+                let returnBtn = document.createElement("button");
+                returnBtn.classList = "button is-danger is-rounded is-normal is-focused";
+                returnBtn.textContent = "Return to Representitive Bio";
+                returnBtn.addEventListener("click", (event) => {
+                    repBio(id);
+                })
                 box.className = "board";
                 container.className = "columns";
                 column1.className = "column";
@@ -208,7 +471,7 @@ function industryContributions(id) {
                 cycle.textContent = "Cycle Year: " + objBios[0].cycle;
                 updated.textContent = "Last Updated: " + objBios[0].last_updated;
                 origin.textContent = "Origin: " + objBios[0].origin;
-                industryTitle.textContent = "Industry:";
+                title.textContent = "Industry:";
                 contributionsTitle.textContent = "Total Contributions:";
 
                 delegationEl.appendChild(box);
@@ -217,9 +480,10 @@ function industryContributions(id) {
                 box.appendChild(updated);
                 box.appendChild(origin);
                 box.appendChild(container);
+                box.appendChild(returnBtn);
                 container.appendChild(column1);
                 container.appendChild(column2);
-                column1.appendChild(industryTitle);
+                column1.appendChild(title);
                 column2.appendChild(contributionsTitle);
 
                 for (i = 0; i < data.response.industries.industry.length; i++) {
@@ -232,6 +496,85 @@ function industryContributions(id) {
                     contributions.textContent = "$" + objData[0].total;
 
                     column1.appendChild(industry);
+                    column2.appendChild(contributions);
+                }
+            })
+    })
+}
+
+function candSector(id) {
+    fetch(ppUrl + id + ".json", {
+        method: "GET",
+        headers: {
+            "X-API-Key": ppApiKey
+        }
+    }).then(function (response) {
+        return response.json();
+    }).then(function (data) {
+        //console.log(data);
+        let cid = data.results[0].crp_id;
+        //some members of congress do not have crpids(e.g. Sen. Alex Padilla CA)
+        //console.log(cid);
+        fetch(osUrl + "&method=candSector&cid=" + cid + "&cycle=2021" + osApiKey)
+            .then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                //console.log(data);
+                delegationEl.innerHTML = "";
+                let objBios = Object.values(data.response.sectors);
+                let box = document.createElement("div");
+                let name = document.createElement("div");
+                let cycle = document.createElement("div");
+                let updated = document.createElement("div");
+                let origin = document.createElement("div");
+                let container = document.createElement("div");
+                let column1 = document.createElement("div");
+                let column2 = document.createElement("div");
+                let title = document.createElement("h2");
+                let contributionsTitle = document.createElement("h2");
+
+                let returnBtn = document.createElement("button");
+                returnBtn.classList = "button is-danger is-rounded is-normal is-focused";
+                returnBtn.textContent = "Return to Representitive Bio";
+                returnBtn.addEventListener("click", (event) => {
+                    repBio(id);
+                })
+                box.className = "board";
+                container.className = "columns";
+                column1.className = "column";
+                column2.className = "column";
+                cycle.className = "cycle";
+                name.className = "rep-name";
+                
+                name.textContent = objBios[0].cand_name;
+                cycle.textContent = "Cycle Year: " + objBios[0].cycle;
+                updated.textContent = "Last Updated: " + objBios[0].last_updated;
+                origin.textContent = "Origin: " + objBios[0].origin;
+                title.textContent = "Industry:";
+                contributionsTitle.textContent = "Total Contributions:";
+
+                delegationEl.appendChild(box);
+                box.appendChild(name);
+                box.appendChild(cycle);
+                box.appendChild(updated);
+                box.appendChild(origin);
+                box.appendChild(container);
+                box.appendChild(returnBtn);
+                container.appendChild(column1);
+                container.appendChild(column2);
+                column1.appendChild(title);
+                column2.appendChild(contributionsTitle);
+
+                for (i = 0; i < data.response.sectors.sector.length; i++) {
+
+                    let objData = Object.values(data.response.sectors.sector[i]);
+                    let sector = document.createElement("p");
+                    let contributions = document.createElement("p");
+
+                    sector.textContent = objData[0].sector_name + ": ";
+                    contributions.textContent = "$" + objData[0].total;
+
+                    column1.appendChild(sector);
                     column2.appendChild(contributions);
                 }
             })
@@ -271,7 +614,7 @@ function displayReps(state, chamber) {
             repSelect.appendChild(repOption);
         }
         selectBox.addEventListener("change", (event) => {
-            repBio(event.target.value); //voteRecord(event.target.value);
+            repBio(event.target.value);
         });
     })
 }
@@ -307,8 +650,6 @@ function displayChamber(state) {
         displayReps(state, event.target.value);
     })
 }
-
-
 
 stateSelect.addEventListener('change', (event) => {
     displayChamber(event.target.value);
