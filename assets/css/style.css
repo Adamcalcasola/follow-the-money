@@ -1,4 +1,23 @@
 
+#FTM {
+    font-size: 55px;
+    font-family: 'Playfair Display', serif;
+    margin-top: -27px;
+}
+
+.hero {
+    width: 100%;
+    padding: 5px;
+    margin: 0 auto;
+}
+.subtitle {
+    width: 100%;
+    display: block;
+    margin: 0;
+    
+}
+
+
 
 #display {
     /* background-image: url('17-170115_blue-us-map-png.png');
@@ -13,6 +32,8 @@
 }
 
 
+
+
 #state-box {
     margin: 30px;
     display:inline-block;
@@ -25,6 +46,10 @@
     background-color: rgb(255, 240, 247);
     font-size: 14px;
     justify-content: center;
+}
+
+#select-bar {
+    align-items: center;
 }
 
 .columns {
@@ -54,7 +79,7 @@
 }
 
 .button {
-    width: 50%;
+    width: auto;
 }
 
 .rep-name {
@@ -83,6 +108,10 @@ a {
 
 #subtitle {
     font-style: italic;
+    margin-bottom: 8.5px;
+}
+#subtitleTwo {
+    margin-bottom: -34.5px;
 }
 
 #vote-box {
@@ -98,11 +127,40 @@ a {
     justify-content: center;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 900px) {
+
     .board {
         width: 100%;
     }
-    .button {
-        width: 100%;
+
+    .board.button {
+        
+        width: auto; 
+    }    
+    
+    
+}
+
+@media screen and (max-width: 768px) {
+    .board {
+        width: 75%;
+        
     }
+
+    .board.button {
+        width: auto;
+    }
+
+}  
+
+@media screen and (max-width: 600px) {
+
+    .board {
+        width: auto;
+    }
+
+    .board.button {
+        width: auto;
+    }
+    
 }
