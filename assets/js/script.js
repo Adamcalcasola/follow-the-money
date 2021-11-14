@@ -4,8 +4,8 @@ let osUrl = "https://www.opensecrets.org/api/?output=json";
 let ppUrl = "https://api.propublica.org/congress/v1/members/";
 let ppUrl2 = "https://api.propublica.org/congress/v1/bills/search.json?query=";
 let stateSelect = document.getElementById("state");
-let delegationEl = document.getElementById("map");
-let voteRecordEl = document.getElementById("vote-box");
+let displayEl = document.getElementById("display");
+//let voteRecordEl = document.getElementById("vote-box");
 let selectBar = document.getElementById("select-bar");
 let voteDisplay = document.getElementById("vote-display");
 let voteBox = document.createElement("div");
@@ -32,8 +32,91 @@ function searchBills(input) {
     })
 }
 
+function voteSummary(id) {
+    fetch(ppUrl + id + ".json", {
+        method: "GET",
+        headers: {"X-API-Key": ppApiKey}
+    }).then(function (response) {
+        return response.json();
+    }).then(function (data) {
+    console.log(data);
+    let firstName = data.results[0].first_name;
+    let lastName = data.results[0].last_name;
+    let party = data.results[0].current_party;
+    let lastUpdated = data.results[0].last_updated;
+    let billsCosponsored = data.results[0].roles[0].bills_cosponsored;
+    let billsSponsored = data.results[0].roles[0].bills_sponsored;
+    let missedVotes = data.results[0].roles[0].missed_votes;
+    let missedVotesPct = data.results[0].roles[0].missed_votes_pct;
+    let totalPresent = data.results[0].roles[0].total_present;
+    let totalVotes =data.results[0].roles[0].total_votes;
+    let votesAgainstPartyPct = data.results[0].roles[0].votes_against_party_pct;
+    let votesWithPartyPct = data.results[0].roles[0].votes_with_party_pct;
+    let committees = data.results[0].roles[0].committees.length;
+    console.log(committees);
+    let committee = [];
+    for (i=0;i<committees;i++) {
+        committee.push(data.results[0].roles[0].committees[i].name);
+    }
+    let breakEl = document.createElement("br");
+    let lastUpdatedEl = document.createElement("div");
+    let billsCosponsoredEl = document.createElement("div");
+    let billsSponsoredEl = document.createElement("div");
+    let missedVotesEl = document.createElement("div");
+    let missedVotesPctEl = document.createElement("div");
+    let totalPresentEl = document.createElement("div");
+    let totalVotesEl = document.createElement("div");
+    let votesAgainstEl = document.createElement("div");
+    let votesWithEl = document.createElement("div");
+    let committeesEl = document.createElement("div");
+    let committeesHeader = document.createElement("div");
+    
+    let repName = document.createElement("h1");
+    repName.className = "rep-name";
+    repName.textContent = firstName + " " + lastName + " (" + party + ")";
+    lastUpdatedEl.textContent = "Last Updated: " + lastUpdated;
+    billsCosponsoredEl.textContent = "Bills Cosponsored: " + billsCosponsored;
+    billsSponsoredEl.textContent = "Bills Sponsored: " + billsSponsored;
+    missedVotesEl.textContent = "Missed Votes: " + missedVotes;
+    missedVotesPctEl.textContent = "% Missed Votes: " + missedVotesPct + "%";
+    totalPresentEl.textContent = "Total Present: " + totalPresent;
+    totalVotesEl.textContent = "Total Votes: " + totalVotes;
+    votesAgainstEl.textContent = "Votes Against Party: " + votesAgainstPartyPct + "%";
+    votesWithEl.textContent = "Votes With Party: " + votesWithPartyPct + "%";
+    committeesHeader.textContent = "Current Committee Assignments:";
+    committeesEl.textContent = committee;
+
+    displayEl.innerHTML = "";
+    bioBox.innerHTML = "";
+    
+    let returnBtn = document.createElement("button");
+    returnBtn.classList = "button is-danger is-rounded is-normal is-focused";
+    returnBtn.textContent = "Return to Representitive Bio";
+    returnBtn.addEventListener("click", (event) => {
+        repBio(id);
+    })
+
+    displayEl.appendChild(bioBox);
+    bioBox.appendChild(repName);
+    bioBox.appendChild(lastUpdatedEl);
+    bioBox.appendChild(breakEl);
+    bioBox.appendChild(billsCosponsoredEl);
+    bioBox.appendChild(billsSponsoredEl);
+    bioBox.appendChild(missedVotesEl);
+    bioBox.appendChild(missedVotesPctEl);
+    bioBox.appendChild(totalPresentEl);
+    bioBox.appendChild(totalVotesEl);
+    bioBox.appendChild(votesAgainstEl);
+    bioBox.appendChild(votesWithEl);
+    bioBox.appendChild(committeesHeader);
+    bioBox.appendChild(committeesEl);
+    bioBox.appendChild(breakEl);
+    bioBox.appendChild(returnBtn);
+    })
+}
+
 function voteRecord(id) {
-    delegationEl.innerHTML = "";
+    displayEl.innerHTML = "";
     fetch(ppUrl + id + "/votes.json", {
         method: "GET",
         headers: {
@@ -85,9 +168,7 @@ function voteRecord(id) {
             totalVoteNo.textContent = "No: " + data.results[0].votes[i].total.no;
             totalVoteNV.textContent = "Not Voting: " + data.results[0].votes[i].total.not_voting;
             
-            // voteBox.appendChild(box2);
-            
-            delegationEl.appendChild(box2);
+            displayEl.appendChild(box2);
             box2.appendChild(container);
             container.appendChild(column1);
             container.appendChild(column2);
@@ -111,41 +192,45 @@ function repBio(id) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
-    //console.log(data);
-    let state = data.results[0].roles[0].state;
-    getLegislators(state);
-    
-    
-    delegationEl.innerHTML = "";
-    bioBox.innerHTML = "";
+    console.log(data);
+
+    // let state = data.results[0].roles[0].state;
+    // getLegislators(state);
     
     // let billSearch = document.createElement("input");
     // billSearch.setAttribute("type", "search");
     // billSearch.setAttribute("id", "bill-search");
-
+    
     // let searchBtn = document.createElement("button");
     // searchBtn.setAttribute("id", "search-btn");
     // searchBtn.textContent = "Search";
-
+    
     // searchBtn.addEventListener("click", (event) => {
     //     searchBills(billSearch.value);
     // });
 
+    displayEl.innerHTML = "";
+    bioBox.innerHTML = "";
+        
     let memberId = data.results[0].id;
     let firstName = data.results[0].first_name;
     let lastName = data.results[0].last_name;
+    let party = data.results[0].current_party;
     let repUrl = data.results[0].url;
 
     let repName = document.createElement("h1");
     repName.className = "rep-name";
-    repName.textContent = firstName + " " + lastName;
-
-    let birthdate = document.createElement("h1");
-    birthdate.textContent = "Date of Birth: " + data.results[0].date_of_birth;
+    repName.textContent = firstName + " " + lastName + " (" + party + ")";
 
     let title = document.createElement("h1");
     title.className = "cycle";
     title.textContent = "Title: " + data.results[0].roles[0].title;
+    
+    let birthdate = document.createElement("h1");
+    birthdate.textContent = "Date of Birth: " + data.results[0].date_of_birth;
+
+    // let yearElected = document.createElement("h1");
+    // yearElected.textContent = "Year Elected: " + data.results[0].roles[0].
 
     let urlLink = document.createElement("a");
     urlLink.setAttribute("href", repUrl);
@@ -179,6 +264,13 @@ function repBio(id) {
         candSector(memberId);
     });
 
+    let voteSummaryBtn = document.createElement("button");
+    voteSummaryBtn.classList = "button is-danger is-rounded is-normal is-focused";
+    voteSummaryBtn.textContent = "Voting Summary";
+    voteSummaryBtn.addEventListener("click", (event) => {
+        voteSummary(memberId);
+    })
+
     let votesBtn = document.createElement("button");
     votesBtn.classList = "button is-danger is-rounded is-normal is-focused";
     votesBtn.textContent = "Last 20 Vote Positions";
@@ -186,7 +278,7 @@ function repBio(id) {
         voteRecord(memberId);
     })
 
-    delegationEl.appendChild(bioBox);
+    displayEl.appendChild(bioBox);
     bioBox.appendChild(repName);
     bioBox.appendChild(title);
     bioBox.appendChild(birthdate);
@@ -197,6 +289,7 @@ function repBio(id) {
     bioBox.appendChild(contribBtn);
     bioBox.appendChild(industryBtn);
     bioBox.appendChild(sectorBtn);
+    bioBox.appendChild(voteSummaryBtn);
     bioBox.appendChild(votesBtn);
     })
 }
@@ -208,9 +301,7 @@ function getLegislators(state) {
         }).then(function (data) {
             //console.log(data);
             for (i=0;i<data.response.legislator.length;i++) {
-
             }
-
         });
     }
 
@@ -250,7 +341,7 @@ function candSummary(id) {
             }).then(function (data) {
                 console.log(data);
                 
-                delegationEl.innerHTML = "";
+                displayEl.innerHTML = "";
                 let objBios = Object.values(data.response.summary);
                 let box = document.createElement("div");
                 let name = document.createElement("div");
@@ -301,7 +392,7 @@ function candSummary(id) {
                 totalWords.textContent = "Total"
                 total.textContent = "$" + objBios[0].total;
 
-                delegationEl.appendChild(box);
+                displayEl.appendChild(box);
                 box.appendChild(name);
                 box.appendChild(cycle);
                 box.appendChild(updated);
@@ -360,7 +451,7 @@ function candContrib(id) {
             }).then(function (data) {
                 console.log(data);
                 
-                delegationEl.innerHTML = "";
+                displayEl.innerHTML = "";
                 let objBios = Object.values(data.response.contributors);
                 let box = document.createElement("div");
                 let name = document.createElement("div");
@@ -394,7 +485,7 @@ function candContrib(id) {
                 title.textContent = "Contributors:";
                 contributionsTitle.textContent = "Total Contributions:";
 
-                delegationEl.appendChild(box);
+                displayEl.appendChild(box);
                 box.appendChild(name);
                 box.appendChild(cycle);
                 box.appendChild(updated);
@@ -441,7 +532,7 @@ function candIndustry(id) {
                 return response.json();
             }).then(function (data) {
                 //console.log(data);
-                delegationEl.innerHTML = "";
+                displayEl.innerHTML = "";
                 let objBios = Object.values(data.response.industries);
                 let box = document.createElement("div");
                 let name = document.createElement("div");
@@ -474,7 +565,7 @@ function candIndustry(id) {
                 title.textContent = "Industry:";
                 contributionsTitle.textContent = "Total Contributions:";
 
-                delegationEl.appendChild(box);
+                displayEl.appendChild(box);
                 box.appendChild(name);
                 box.appendChild(cycle);
                 box.appendChild(updated);
@@ -520,7 +611,7 @@ function candSector(id) {
                 return response.json();
             }).then(function (data) {
                 //console.log(data);
-                delegationEl.innerHTML = "";
+                displayEl.innerHTML = "";
                 let objBios = Object.values(data.response.sectors);
                 let box = document.createElement("div");
                 let name = document.createElement("div");
@@ -553,7 +644,7 @@ function candSector(id) {
                 title.textContent = "Industry:";
                 contributionsTitle.textContent = "Total Contributions:";
 
-                delegationEl.appendChild(box);
+                displayEl.appendChild(box);
                 box.appendChild(name);
                 box.appendChild(cycle);
                 box.appendChild(updated);

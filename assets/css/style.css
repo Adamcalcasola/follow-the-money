@@ -1,6 +1,6 @@
 
 
-#map {
+#display {
     /* background-image: url('17-170115_blue-us-map-png.png');
     background-repeat: no-repeat;
     background-position: center;
@@ -27,9 +27,9 @@
     justify-content: center;
 }
 
-/* .column {
-    text-align: center;
-} */
+.columns {
+    width: 100%;
+} 
 
 .board {
     /* margin: 30px; */
@@ -43,12 +43,18 @@
     justify-content: center;
     flex-basis: auto;
     text-align: center;
+    align-items: center;
     /*text-align: center;*/
     background-color: rgb(255, 240, 247);
     font-size: 14px;
 }
+
 .cycle {
     font-size: 18px;
+}
+
+.button {
+    width: 50%;
 }
 
 .rep-name {
@@ -58,7 +64,6 @@
     font-size: 22px;
     color: rgb(15, 33, 136);
 }
-
 
 h2 {
     font-weight: bold;
@@ -70,6 +75,8 @@ h2 {
 }
 
 a {
+    font-size: larger;
+    margin-bottom: 20px;
     display: block;
     color: red;
 }
@@ -92,7 +99,10 @@ a {
 }
 
 @media screen and (max-width: 700px) {
-    #map {
-        background-image: url("");
+    .board {
+        width: 100%;
+    }
+    .button {
+        width: 100%;
     }
 }
