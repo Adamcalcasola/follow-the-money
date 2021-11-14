@@ -46,6 +46,6 @@ GitHub:    https://github.com/Adamcalcasola/follow-the-money
 
  
 SCREENSHOTS:
-<img src="images/FollowTheMoney 1.png">
-<img src="images/FollowTheMoney 2.png">
+![appScreenshot](./images/FollowTheMoney\1.png)
+![appScreenshot](./images/FollowTheMoney\2.png)
 
