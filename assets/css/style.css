@@ -1,14 +1,14 @@
 
 
-#map {
-    background-image: url('17-170115_blue-us-map-png.png');
+#display {
+    /* background-image: url('17-170115_blue-us-map-png.png');
     background-repeat: no-repeat;
     background-position: center;
-    height: 500px;
+    height: 500px; */
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
+    padding: 30px;
     opacity: .75;
 }
 
@@ -19,27 +19,44 @@
     border: solid red;
     padding: 10px;
     border-radius: 10px;
-    width: 600px;
+    width: 100%;
     color: black;
     text-align: center;
     background-color: rgb(255, 240, 247);
     font-size: 14px;
     justify-content: center;
 }
+
+.columns {
+    width: 100%;
+} 
+
 .board {
-    margin: 30px;
+    /* margin: 30px; */
     border: solid red;
     padding: 10px;
     border-radius: 10px;
-    width: 600px;
+    width: 50%;
     color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-basis: auto;
     text-align: center;
+    align-items: center;
+    /*text-align: center;*/
     background-color: rgb(255, 240, 247);
     font-size: 14px;
 }
+
 .cycle {
     font-size: 18px;
 }
+
+.button {
+    width: 50%;
+}
+
 .rep-name {
     font-weight: bold;
     text-align: center;
@@ -47,7 +64,6 @@
     font-size: 22px;
     color: rgb(15, 33, 136);
 }
-
 
 h2 {
     font-weight: bold;
@@ -59,6 +75,8 @@ h2 {
 }
 
 a {
+    font-size: larger;
+    margin-bottom: 20px;
     display: block;
     color: red;
 }
@@ -78,4 +96,13 @@ a {
     background-color: rgb(255, 240, 247);
     font-size: 14px;
     justify-content: center;
+}
+
+@media screen and (max-width: 700px) {
+    .board {
+        width: 100%;
+    }
+    .button {
+        width: 100%;
+    }
 }
