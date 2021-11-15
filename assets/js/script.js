@@ -181,7 +181,7 @@ function voteRecord(id) {
             let totalVoteNV = document.createElement("div");
 
             
-            container.className = "columns";
+            container.className = "columns is-mobile";
             column1.className = "column";
             column2.className = "column";
             column3.className = "column";
@@ -402,7 +402,7 @@ function candSummary(id) {
                 })
 
                 box.className = "board";
-                container.className = "columns";
+                container.className = "columns is-mobile";
                 column1.className = "column";
                 column2.className = "column";
                 cycle.className = "cycle";
@@ -487,7 +487,7 @@ function candContrib(id) {
                 })
 
                 box.className = "board";
-                container.className = "columns";
+                container.className = "columns is-mobile";
                 column1.className = "column";
                 column2.className = "column";
                 cycle.className = "cycle";
@@ -559,7 +559,7 @@ function candIndustry(id) {
                 let contributionsTitle = document.createElement("h2");
 
                 box.className = "board";
-                container.className = "columns";
+                container.className = "columns is-mobile";
                 column1.className = "column";
                 column2.className = "column";
                 cycle.className = "cycle";
@@ -637,7 +637,7 @@ function candSector(id) {
                     repBio(id);
                 })
                 box.className = "board";
-                container.className = "columns";
+                container.className = "columns is-mobile";
                 column1.className = "column";
                 column2.className = "column";
                 cycle.className = "cycle";
