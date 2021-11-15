@@ -7,28 +7,41 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css" />
     <title>Follow The Money</title>
 </head>
 
 <body>
+
     <!-- Hero section with title and subtitle and Bulma CSS-->
     <section class="hero is-link">
         <div class="hero-body">
-            <p class="title has-text-centered">
-                Follow the Money
+            <p id="FTM" class="title has-text-centered">
+                Follow The Money
             </p>
             <p id="subtitle" class="subtitle has-text-centered">
-                Transparency for the People <br>
+                Transparency For The People 
             </p>
-            <p class="has-text-centered">
+            <p id="subtitleTwo" class="has-text-centered">
                 Discovering where our politicians receive funds from and how that may impact their vote
             </p>
         </div>
     </section>
 
+    <!-- <input type="search" id="bill-search">
+
+    <button id="search-btn">Search</button> -->
+
+
+
     <!-- Dropdown select button -->
-    <div id="select-bar" class="column is-offset-4">
+    <div id="select-bar" class="column is-offset-3">
+        <div id="save-bar" class="select is-danger is-rounded is-normal is-focused">
+            <select id="search-save">
+                <option value="Previous Searches">Previous Searches</option>
+            </select>
+        </div>
         <div id="state-select" class="select is-danger is-rounded is-normal is-focused">
             <select id = "state">
                 <option value="Select State">Select State</option>
@@ -87,36 +100,47 @@
     </div>  
 
     <!--picture of USA map-->
-    <div id="map">
-
+    <div id="vote-display">
+        <div id="display">
+            <img src="assets/images/17-170115_blue-us-map-png.png">
+        </div>
     </div>
-
-    <!--Popup for CT and display will be "none"-->
+    <!-- Popup for CT and display will be "none"
     <div class="card is-fluid is-danger" id="state-box">
-        <!--<h1 class="senators">Senators</h1>
+        <h1 class="senators">Senators</h1>
         <h2 id="senator-one">Senator-1</h2>
         <h2 id="senator-two">Senator-2</h2>-->
-    </div>
+    <!-- </div> -->
 
 
     <!--box that contains the selected reps vote history-->
-    <div class="column is-fluid is-danger" id="vote-box">
+    <!-- <div class="column is-fluid is-danger" id="vote-box">
 
-    </div>
+    </div> --> 
 
-    <form class="box">
-        <div class="field">
-            <label class="label">Save Search Results</label>
-            <div class="control">
-                <input class="input" type="email" placeholder="Email Address">
-            </div>
-        </div>
-
-        <button class="button is-danger is-normal is-rounded">Save</button>
-    </form>
     
     <!-- Footer -->
     <footer class="footer">
+        <!-- <div class="save-box">
+            <div class="field">
+                <label class="label">Save Search Results</label>
+                <div class="control">
+                    <input class="input" type="email" placeholder="Email Address">
+                </div>
+            </div>
+    
+            <button class="button is-danger is-normal is-rounded">Save</button>
+        </div> -->
+
+        <div class="apiLinks has-text-centered">
+            <a href="https://www.propublica.org/datastore/api/propublica-congress-api" target="_blank">
+                ProPublica API
+            </a>
+            <a href="https://www.opensecrets.org/open-data/api" target="_blank">
+                OpenSecrets API
+            </a>
+        </div>
+        
         <div class="content has-text-centered">
             <p>
                 Brought to you by UConn Coding BootCamp

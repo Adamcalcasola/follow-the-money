@@ -1,32 +1,87 @@
-#map {
-    background-image: url('17-170115_blue-us-map-png.png');
+
+#FTM {
+    font-size: 55px;
+    font-family: 'Playfair Display', serif;
+    margin-top: -27px;
+}
+
+.hero {
+    width: 100%;
+    padding: 5px;
+    margin: 0 auto;
+}
+.subtitle {
+    width: 100%;
+    display: block;
+    margin: 0;
+    
+}
+
+
+
+#display {
+    /* background-image: url('17-170115_blue-us-map-png.png');
     background-repeat: no-repeat;
     background-position: center;
-    height: 500px;
+    height: 500px; */
     display: flex;
     align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    padding: 30px;
     opacity: .75;
 }
 
 
+
+
 #state-box {
-    text-align: center;
-}
-.board {
     margin: 30px;
+    display:inline-block;
     border: solid red;
     padding: 10px;
     border-radius: 10px;
-    width: 600px;
+    width: 100%;
     color: black;
     text-align: center;
     background-color: rgb(255, 240, 247);
     font-size: 14px;
+    justify-content: center;
 }
+
+#select-bar {
+    align-items: center;
+}
+
+.columns {
+    width: 100%;
+} 
+
+.board {
+    /* margin: 30px; */
+    border: solid red;
+    padding: 10px;
+    border-radius: 10px;
+    width: 50%;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-basis: auto;
+    text-align: center;
+    align-items: center;
+    /*text-align: center;*/
+    background-color: rgb(255, 240, 247);
+    font-size: 14px;
+}
+
 .cycle {
     font-size: 18px;
 }
+
+.button {
+    width: auto;
+}
+
 .rep-name {
     font-weight: bold;
     text-align: center;
@@ -34,7 +89,6 @@
     font-size: 22px;
     color: rgb(15, 33, 136);
 }
-
 
 h2 {
     font-weight: bold;
@@ -46,12 +100,18 @@ h2 {
 }
 
 a {
+    font-size: larger;
+    margin-bottom: 20px;
     display: block;
     color: red;
 }
 
 #subtitle {
     font-style: italic;
+    margin-bottom: 8.5px;
+}
+#subtitleTwo {
+    margin-bottom: -34.5px;
 }
 
 #vote-box {
@@ -65,4 +125,42 @@ a {
     background-color: rgb(255, 240, 247);
     font-size: 14px;
     justify-content: center;
+}
+
+@media screen and (max-width: 900px) {
+
+    .board {
+        width: 100%;
+    }
+
+    .board.button {
+        
+        width: auto; 
+    }    
+    
+    
+}
+
+@media screen and (max-width: 768px) {
+    .board {
+        width: 75%;
+        
+    }
+
+    .board.button {
+        width: auto;
+    }
+
+}  
+
+@media screen and (max-width: 600px) {
+
+    .board {
+        width: auto;
+    }
+
+    .board.button {
+        width: auto;
+    }
+    
 }
