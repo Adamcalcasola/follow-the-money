@@ -157,7 +157,7 @@ function voteSummary(id) {
 }
 // Displays reps voting record
 function voteRecord(id) {
-    voteRecordEl.innerHTML = "";
+    displayEl.innerHTML = "";
     fetch(ppUrl + id + "/votes.json", {
         method: "GET",
         headers: {
@@ -166,61 +166,67 @@ function voteRecord(id) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
+
         for (i = 0; i < data.results[0].votes.length; i++) {
+            let box2 = document.createElement("div");
             let container = document.createElement("div");
             let column1 = document.createElement("div");
             let column2 = document.createElement("div");
             let column3 = document.createElement("div");
-            let billDescTitle = document.createElement("h2");
             let billDesc = document.createElement("div");
-            let positionTitle = document.createElement("h2");
             let position = document.createElement("div");
-            let totalVote = document.createElement("h2");
             let totalVoteYes = document.createElement("div");
             let totalVoteNo = document.createElement("div");
             let totalVoteNV = document.createElement("div");
-
+            let billDescTitle = document.createElement("h2");
+            let positionTitle = document.createElement("h2");
+            let totalVote = document.createElement("h2");
             
+<<<<<<< HEAD
             container.className = "columns is-mobile";
             column1.className = "column";
             column2.className = "column";
             column3.className = "column";
+=======
+            box2.className = "board";
+            container.className = "columns";
+            column1.classList = "column";
+            column2.classList = "column";
+            column3.classList = "column";
+>>>>>>> 060867c9b97f358096828f6b615f5e638e4dc3e8
             billDescTitle.className = "billDescTitle";
-            billDesc.className = "billDesc";
             positionTitle.className = "positionTitle"
-            position.className = "position";
             totalVote.className = "totalvote";
+            billDesc.className = "billDesc";
+            position.className = "position";
             totalVoteYes.className = "totalVoteYes";
             totalVoteNo.className =  "totalVoteNo";
             totalVoteNV.className = "totalVoteNV";
             
             billDescTitle.textContent = "Description"
-            billDesc.textContent = data.results[0].votes[i].description;
-
             positionTitle.textContent = "Position";
-            position.textContent = data.results[0].votes[i].position;
-
             totalVote.textContent = "Total Vote Count";
+            billDesc.textContent = data.results[0].votes[i].description;
+            
+            position.textContent = data.results[0].votes[i].position;
+            
             totalVoteYes.textContent = "Yes : " + data.results[0].votes[i].total.yes;
             totalVoteNo.textContent = "No: " + data.results[0].votes[i].total.no;
             totalVoteNV.textContent = "Not Voting: " + data.results[0].votes[i].total.not_voting;
-
-            voteRecordEl.appendChild(container);
-
+            
+            displayEl.appendChild(box2);
+            box2.appendChild(container);
             container.appendChild(column1);
             container.appendChild(column2);
             container.appendChild(column3);
-
             column1.appendChild(billDescTitle);
             column1.appendChild(billDesc);
-
             column2.appendChild(positionTitle);
             column2.appendChild(position);
-
             column3.appendChild(totalVote);
             column3.appendChild(totalVoteYes);
             column3.appendChild(totalVoteNo);
-            column3.appendChild(totalVoteNV);   
+            column3.appendChild(totalVoteNV);
         }
     })
 }
@@ -558,6 +564,13 @@ function candIndustry(id) {
                 let industryTitle = document.createElement("h2");
                 let contributionsTitle = document.createElement("h2");
 
+                let returnBtn = document.createElement("button");
+                returnBtn.classList = "button is-danger is-rounded is-normal is-focused";
+                returnBtn.textContent = "Return to Representitive Bio";
+                returnBtn.addEventListener("click", (event) => {
+                    repBio(id);
+                })
+                
                 box.className = "board";
                 container.className = "columns is-mobile";
                 column1.className = "column";
@@ -572,12 +585,15 @@ function candIndustry(id) {
                 industryTitle.textContent = "Industry:";
                 contributionsTitle.textContent = "Total Contributions:";
 
-                delegationEl.appendChild(box);
+                displayEl.innerHTML = "";
+
+                displayEl.appendChild(box);
                 box.appendChild(name);
                 box.appendChild(cycle);
                 box.appendChild(updated);
                 box.appendChild(origin);
                 box.appendChild(container);
+                box.appendChild(returnBtn);
                 container.appendChild(column1);
                 container.appendChild(column2);
                 column1.appendChild(industryTitle);
@@ -769,7 +785,6 @@ searchSave.addEventListener('change', (event) => {
 });
 
 stateSelect.addEventListener('change', (event) => {
-    console.log(event.target.value);
     if (event.target.value === "Select State") {
         location.reload();
     } else {
