@@ -769,7 +769,6 @@ searchSave.addEventListener('change', (event) => {
 });
 
 stateSelect.addEventListener('change', (event) => {
-    console.log(event.target.value);
     if (event.target.value === "Select State") {
         location.reload();
     } else {
