@@ -182,18 +182,11 @@ function voteRecord(id) {
             let positionTitle = document.createElement("h2");
             let totalVote = document.createElement("h2");
             
-<<<<<<< HEAD
-            container.className = "columns is-mobile";
-            column1.className = "column";
-            column2.className = "column";
-            column3.className = "column";
-=======
             box2.className = "board";
             container.className = "columns";
             column1.classList = "column";
             column2.classList = "column";
             column3.classList = "column";
->>>>>>> 060867c9b97f358096828f6b615f5e638e4dc3e8
             billDescTitle.className = "billDescTitle";
             positionTitle.className = "positionTitle"
             totalVote.className = "totalvote";
