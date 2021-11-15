@@ -1,3 +1,4 @@
+// Global Variables
 let osApiKey = "&apikey=57bf365637e080dcba9bad64d8d27cd9";
 let ppApiKey = "kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
 let osUrl = "https://www.opensecrets.org/api/?output=json";
@@ -5,15 +6,57 @@ let ppUrl = "https://api.propublica.org/congress/v1/members/";
 let ppUrl2 = "https://api.propublica.org/congress/v1/bills/search.json?query=";
 let stateSelect = document.getElementById("state");
 let displayEl = document.getElementById("display");
-//let voteRecordEl = document.getElementById("vote-box");
 let selectBar = document.getElementById("select-bar");
 let voteDisplay = document.getElementById("vote-display");
 let voteBox = document.createElement("div");
 let bioBox = document.createElement("div");
+let searchSave = document.getElementById("search-save");
+var searches = [];
 bioBox.classList = "board";
 voteBox.classList = "column is-fluid is-danger board";
 voteBox.setAttribute("id", "vote-box");
 
+// loads previous search from local storage
+function loadSearch() {
+    searches = JSON.parse(localStorage.getItem("searches")) || [];
+    for(i=0;i<searches.length;i++) {
+        let saveOption = document.createElement("Option");
+        saveOption.setAttribute("value", searches[i].id);
+        saveOption.textContent = searches[i].name;
+        searchSave.appendChild(saveOption);
+    }
+}
+
+// saves searched representive and populated select box
+function saveSearch(id) {
+    fetch(ppUrl + id + ".json", {
+        method: "GET",
+        headers: {"X-API-Key": ppApiKey}
+    }).then(function (response) {
+        return response.json();
+    }).then(function (data) {
+
+    let memberId = data.results[0].id;
+    let firstName = data.results[0].first_name;
+    let lastName = data.results[0].last_name;
+    let fullName = firstName + " " + lastName;
+
+    let saveOption = document.createElement("Option");
+    saveOption.setAttribute("value", memberId);
+    saveOption.textContent = fullName;
+    searchSave.appendChild(saveOption);
+
+    searches.push({
+        id: memberId,
+        name: fullName
+    });
+ 
+    localStorage.setItem("searches", JSON.stringify(searches));
+    repBio(memberId);
+    })
+}
+
+// function(uncalled) for future feature to search bills by key word
 function searchBills(input) {
     console.log(input);
     fetch(ppUrl2 + input, {
@@ -31,7 +74,7 @@ function searchBills(input) {
         }
     })
 }
-
+// Displays reps voting summary and current committee assignments
 function voteSummary(id) {
     fetch(ppUrl + id + ".json", {
         method: "GET",
@@ -39,7 +82,6 @@ function voteSummary(id) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
-    console.log(data);
     let firstName = data.results[0].first_name;
     let lastName = data.results[0].last_name;
     let party = data.results[0].current_party;
@@ -53,7 +95,6 @@ function voteSummary(id) {
     let votesAgainstPartyPct = data.results[0].roles[0].votes_against_party_pct;
     let votesWithPartyPct = data.results[0].roles[0].votes_with_party_pct;
     let committees = data.results[0].roles[0].committees.length;
-    console.log(committees);
     let committee = [];
     for (i=0;i<committees;i++) {
         committee.push(data.results[0].roles[0].committees[i].name);
@@ -114,9 +155,9 @@ function voteSummary(id) {
     bioBox.appendChild(returnBtn);
     })
 }
-
+// Displays reps voting record
 function voteRecord(id) {
-    displayEl.innerHTML = "";
+    voteRecordEl.innerHTML = "";
     fetch(ppUrl + id + "/votes.json", {
         method: "GET",
         headers: {
@@ -125,66 +166,65 @@ function voteRecord(id) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
-        console.log(data);
-        //voteDisplay.append(voteBox);
-
         for (i = 0; i < data.results[0].votes.length; i++) {
-            let box2 = document.createElement("div");
             let container = document.createElement("div");
             let column1 = document.createElement("div");
             let column2 = document.createElement("div");
             let column3 = document.createElement("div");
+            let billDescTitle = document.createElement("h2");
             let billDesc = document.createElement("div");
+            let positionTitle = document.createElement("h2");
             let position = document.createElement("div");
+            let totalVote = document.createElement("h2");
             let totalVoteYes = document.createElement("div");
             let totalVoteNo = document.createElement("div");
             let totalVoteNV = document.createElement("div");
-            let billDescTitle = document.createElement("h2");
-            let positionTitle = document.createElement("h2");
-            let totalVote = document.createElement("h2");
+
             
-            box2.className = "board";
             container.className = "columns";
-            column1.classList = "column";
-            column2.classList = "column";
-            column3.classList = "column";
+            column1.className = "column";
+            column2.className = "column";
+            column3.className = "column";
             billDescTitle.className = "billDescTitle";
-            positionTitle.className = "positionTitle"
-            totalVote.className = "totalvote";
             billDesc.className = "billDesc";
+            positionTitle.className = "positionTitle"
             position.className = "position";
+            totalVote.className = "totalvote";
             totalVoteYes.className = "totalVoteYes";
             totalVoteNo.className =  "totalVoteNo";
             totalVoteNV.className = "totalVoteNV";
             
             billDescTitle.textContent = "Description"
-            positionTitle.textContent = "Position";
-            totalVote.textContent = "Total Vote Count";
             billDesc.textContent = data.results[0].votes[i].description;
-            
+
+            positionTitle.textContent = "Position";
             position.textContent = data.results[0].votes[i].position;
-            
+
+            totalVote.textContent = "Total Vote Count";
             totalVoteYes.textContent = "Yes : " + data.results[0].votes[i].total.yes;
             totalVoteNo.textContent = "No: " + data.results[0].votes[i].total.no;
             totalVoteNV.textContent = "Not Voting: " + data.results[0].votes[i].total.not_voting;
-            
-            displayEl.appendChild(box2);
-            box2.appendChild(container);
+
+            voteRecordEl.appendChild(container);
+
             container.appendChild(column1);
             container.appendChild(column2);
             container.appendChild(column3);
+
             column1.appendChild(billDescTitle);
             column1.appendChild(billDesc);
+
             column2.appendChild(positionTitle);
             column2.appendChild(position);
+
             column3.appendChild(totalVote);
             column3.appendChild(totalVoteYes);
             column3.appendChild(totalVoteNo);
-            column3.appendChild(totalVoteNV);
+            column3.appendChild(totalVoteNV);   
         }
     })
 }
-
+// Displays reps biography and produces buttons for other functional displays
 function repBio(id) {
     fetch(ppUrl + id + ".json", {
         method: "GET",
@@ -192,7 +232,6 @@ function repBio(id) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
-    console.log(data);
 
     // let state = data.results[0].roles[0].state;
     // getLegislators(state);
@@ -217,10 +256,11 @@ function repBio(id) {
     let lastName = data.results[0].last_name;
     let party = data.results[0].current_party;
     let repUrl = data.results[0].url;
-
+    let fullName = firstName + " " + lastName + " (" + party + ")"
+    
     let repName = document.createElement("h1");
     repName.className = "rep-name";
-    repName.textContent = firstName + " " + lastName + " (" + party + ")";
+    repName.textContent = fullName;
 
     let title = document.createElement("h1");
     title.className = "cycle";
@@ -228,9 +268,6 @@ function repBio(id) {
     
     let birthdate = document.createElement("h1");
     birthdate.textContent = "Date of Birth: " + data.results[0].date_of_birth;
-
-    // let yearElected = document.createElement("h1");
-    // yearElected.textContent = "Year Elected: " + data.results[0].roles[0].
 
     let urlLink = document.createElement("a");
     urlLink.setAttribute("href", repUrl);
@@ -283,8 +320,6 @@ function repBio(id) {
     bioBox.appendChild(title);
     bioBox.appendChild(birthdate);
     bioBox.appendChild(urlLink);
-    //bioBox.appendChild(billSearch);
-    //bioBox.appendChild(searchBtn);
     bioBox.appendChild(summaryBtn);
     bioBox.appendChild(contribBtn);
     bioBox.appendChild(industryBtn);
@@ -293,17 +328,17 @@ function repBio(id) {
     bioBox.appendChild(votesBtn);
     })
 }
-
-function getLegislators(state) {
-    fetch(osUrl + "&method=getLegislators&id=" + state + osApiKey)
-        .then(function (response) {
-            return response.json();
-        }).then(function (data) {
-            //console.log(data);
-            for (i=0;i<data.response.legislator.length;i++) {
-            }
-        });
-    }
+// Unfinished function to get Legislators by state. Uncalled and should probably be deleted
+// function getLegislators(state) {
+//     fetch(osUrl + "&method=getLegislators&id=" + state + osApiKey)
+//         .then(function (response) {
+//             return response.json();
+//         }).then(function (data) {
+//             //console.log(data);
+//             for (i=0;i<data.response.legislator.length;i++) {
+//             }
+//         });
+//     }
 
 // Unfinished CID retrieval function for Open Secret calls
 // function getCid(id) {
@@ -322,7 +357,7 @@ function getLegislators(state) {
 //     })
 //     return cid;
 // }
-
+// Function to display candidates financial summary
 function candSummary(id) {
     fetch(ppUrl + id + ".json", {
         method: "GET",
@@ -332,14 +367,11 @@ function candSummary(id) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
-        //console.log(data);
         let cid = data.results[0].crp_id;
-        //let id = data.results[0].id;
         fetch(osUrl + "&method=candSummary&cid=" + cid + "&cycle=2021" + osApiKey)
             .then(function (response) {
                 return response.json();
             }).then(function (data) {
-                console.log(data);
                 
                 displayEl.innerHTML = "";
                 let objBios = Object.values(data.response.summary);
@@ -415,24 +447,10 @@ function candSummary(id) {
                 column2.appendChild(debt);
                 column2.appendChild(spent);
                 column2.appendChild(total);
-
-                // for (i = 0; i < data.response.contributors.contributor.length; i++) {
-
-                //     let objData = Object.values(data.response.contributors.contributor[i]);
-                //     let contributor = document.createElement("p");
-                //     let contributions = document.createElement("p");
-
-                //     contributor.textContent = objData[0].org_name + ": ";
-                //     contributions.textContent = "$" + objData[0].total;
-
-                //     column1.appendChild(contributor);
-                //     column2.appendChild(contributions);
-                // }
-
             })
     })
 }
-
+// Function to display candidates top contributors
 function candContrib(id) {
     fetch(ppUrl + id + ".json", {
         method: "GET",
@@ -442,14 +460,11 @@ function candContrib(id) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
-        //console.log(data);
         let cid = data.results[0].crp_id;
-        //let id = data.results[0].id;
         fetch(osUrl + "&method=candContrib&cid=" + cid + "&cycle=2021" + osApiKey)
             .then(function (response) {
                 return response.json();
             }).then(function (data) {
-                console.log(data);
                 
                 displayEl.innerHTML = "";
                 let objBios = Object.values(data.response.contributors);
@@ -509,11 +524,10 @@ function candContrib(id) {
                     column1.appendChild(contributor);
                     column2.appendChild(contributions);
                 }
-
             })
     })
 }
-
+// Function to display candidates top industry contributors
 function candIndustry(id) {
     fetch(ppUrl + id + ".json", {
         method: "GET",
@@ -532,7 +546,6 @@ function candIndustry(id) {
                 return response.json();
             }).then(function (data) {
                 //console.log(data);
-                displayEl.innerHTML = "";
                 let objBios = Object.values(data.response.industries);
                 let box = document.createElement("div");
                 let name = document.createElement("div");
@@ -542,15 +555,9 @@ function candIndustry(id) {
                 let container = document.createElement("div");
                 let column1 = document.createElement("div");
                 let column2 = document.createElement("div");
-                let title = document.createElement("h2");
+                let industryTitle = document.createElement("h2");
                 let contributionsTitle = document.createElement("h2");
 
-                let returnBtn = document.createElement("button");
-                returnBtn.classList = "button is-danger is-rounded is-normal is-focused";
-                returnBtn.textContent = "Return to Representitive Bio";
-                returnBtn.addEventListener("click", (event) => {
-                    repBio(id);
-                })
                 box.className = "board";
                 container.className = "columns";
                 column1.className = "column";
@@ -562,19 +569,18 @@ function candIndustry(id) {
                 cycle.textContent = "Cycle Year: " + objBios[0].cycle;
                 updated.textContent = "Last Updated: " + objBios[0].last_updated;
                 origin.textContent = "Origin: " + objBios[0].origin;
-                title.textContent = "Industry:";
+                industryTitle.textContent = "Industry:";
                 contributionsTitle.textContent = "Total Contributions:";
 
-                displayEl.appendChild(box);
+                delegationEl.appendChild(box);
                 box.appendChild(name);
                 box.appendChild(cycle);
                 box.appendChild(updated);
                 box.appendChild(origin);
                 box.appendChild(container);
-                box.appendChild(returnBtn);
                 container.appendChild(column1);
                 container.appendChild(column2);
-                column1.appendChild(title);
+                column1.appendChild(industryTitle);
                 column2.appendChild(contributionsTitle);
 
                 for (i = 0; i < data.response.industries.industry.length; i++) {
@@ -592,7 +598,7 @@ function candIndustry(id) {
             })
     })
 }
-
+// Function to display candidates top sector contributors
 function candSector(id) {
     fetch(ppUrl + id + ".json", {
         method: "GET",
@@ -671,7 +677,7 @@ function candSector(id) {
             })
     })
 }
-
+// Function to display reps in select box for a given state and chamber
 function displayReps(state, chamber) {
     selectBar.removeChild(selectBar.lastChild);
 
@@ -683,6 +689,7 @@ function displayReps(state, chamber) {
     stateBox.classList = "column is-offset-6";
     selectBox.classList = "select is-danger is-rounded is-normal is-focused";
     repSelect.setAttribute("id", "rep-select");
+    nilOption.setAttribute("value", "Select Member");
     nilOption.textContent = "Select Member";
 
     selectBar.appendChild(selectBox);
@@ -697,7 +704,6 @@ function displayReps(state, chamber) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
-        //console.log(data)
         for (i = 0; i < data.results.length; i++) {
             let repOption = document.createElement("option");
             repOption.setAttribute("value", data.results[i].id);
@@ -705,11 +711,15 @@ function displayReps(state, chamber) {
             repSelect.appendChild(repOption);
         }
         selectBox.addEventListener("change", (event) => {
-            repBio(event.target.value);
+            if (event.target.value === "Select Member") {
+                location.reload();
+            } else {
+            saveSearch(event.target.value);
+            }
         });
     })
 }
-
+// Function to display chambeer select box after selecting state
 function displayChamber(state) {
     selectBar.removeChild(selectBar.lastChild);
 
@@ -724,6 +734,7 @@ function displayChamber(state) {
     selectDiv.classList = "select is-danger is-rounded is-normal is-focused";
 
     chamberSelect.setAttribute("id", "chamber-select");
+    noOption.setAttribute("value", "Select Chamber");
     senateOption.setAttribute("value", "senate");
     houseOption.setAttribute("value", "house");
 
@@ -738,10 +749,31 @@ function displayChamber(state) {
     chamberSelect.appendChild(houseOption);
 
     selectDiv.addEventListener("change", (event) => {
+        if (event.target.value === "Select Chamber") {
+            location.reload();
+        } else {
         displayReps(state, event.target.value);
+        }
     })
 }
 
-stateSelect.addEventListener('change', (event) => {
-    displayChamber(event.target.value);
+loadSearch();
+
+// Event listeners for saved search and state selector
+searchSave.addEventListener('change', (event) => {
+    if (event.target.value === "Previous Searches") {
+        location.reload();
+    } else {
+    repBio(event.target.value);
+    }
 });
+
+stateSelect.addEventListener('change', (event) => {
+    console.log(event.target.value);
+    if (event.target.value === "Select State") {
+        location.reload();
+    } else {
+    displayChamber(event.target.value);
+    }
+});
+
