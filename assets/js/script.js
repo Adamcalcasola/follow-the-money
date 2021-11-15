@@ -183,7 +183,7 @@ function voteRecord(id) {
             let totalVote = document.createElement("h2");
             
             box2.className = "board";
-            container.className = "columns";
+            container.className = "columns is-mobile";
             column1.classList = "column";
             column2.classList = "column";
             column3.classList = "column";
