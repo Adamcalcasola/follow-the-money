@@ -136,14 +136,18 @@ a {
     .board.button {
         
         width: auto; 
-    }    
+    }
+    
+    .column {
+        display: inline-block;
+    }
     
     
 }
 
 @media screen and (max-width: 768px) {
     .board {
-        width: 75%;
+        width: 100%;
         
     }
 
@@ -151,16 +155,43 @@ a {
         width: auto;
     }
 
+    .column {
+        display: inline-block;
+    }
+    
+
 }  
 
 @media screen and (max-width: 600px) {
 
     .board {
-        width: auto;
+        width: 100%;
     }
 
     .board.button {
-        width: auto;
+        width: 90%;
+    }
+
+    .board .column {
+        display: inline-block;
+    }
+    
+    
+}
+
+@media screen and (max-width: 500px) {
+
+    .board {
+        width: 100%;
+    }
+
+    .board.button {
+        width: 90%;
+    }
+
+    .board .column {
+        display: inline-block;
+       
     }
     
 }
