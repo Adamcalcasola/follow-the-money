@@ -205,7 +205,7 @@ function voteRecord(id) {
             totalVoteNo.textContent = "No: " + data.results[0].votes[i].total.no;
             totalVoteNV.textContent = "Not Voting: " + data.results[0].votes[i].total.not_voting;
 
-            voteRecordEl.appendChild(container);
+            displayEl.appendChild(container);
 
             container.appendChild(column1);
             container.appendChild(column2);
@@ -558,6 +558,13 @@ function candIndustry(id) {
                 let industryTitle = document.createElement("h2");
                 let contributionsTitle = document.createElement("h2");
 
+                let returnBtn = document.createElement("button");
+                returnBtn.classList = "button is-danger is-rounded is-normal is-focused";
+                returnBtn.textContent = "Return to Representitive Bio";
+                returnBtn.addEventListener("click", (event) => {
+                    repBio(id);
+                })
+                
                 box.className = "board";
                 container.className = "columns";
                 column1.className = "column";
@@ -572,12 +579,15 @@ function candIndustry(id) {
                 industryTitle.textContent = "Industry:";
                 contributionsTitle.textContent = "Total Contributions:";
 
+                displayEl.innerHTML = "";
+
                 displayEl.appendChild(box);
                 box.appendChild(name);
                 box.appendChild(cycle);
                 box.appendChild(updated);
                 box.appendChild(origin);
                 box.appendChild(container);
+                box.appendChild(returnBtn);
                 container.appendChild(column1);
                 container.appendChild(column2);
                 column1.appendChild(industryTitle);
