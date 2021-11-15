@@ -1,7 +1,7 @@
 // Global Variables
 let osApiKey = "&apikey=57bf365637e080dcba9bad64d8d27cd9";
 let ppApiKey = "kqVbQ8sZ5zEvgLGkTATaYq7atntKVhzG7Nnx2e9k"
-let osUrl = "http://www.opensecrets.org/api/?output=json";
+let osUrl = "https://www.opensecrets.org/api/?output=json";
 let ppUrl = "https://api.propublica.org/congress/v1/members/";
 let ppUrl2 = "https://api.propublica.org/congress/v1/bills/search.json?query=";
 let stateSelect = document.getElementById("state");
