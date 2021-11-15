@@ -166,61 +166,60 @@ function voteRecord(id) {
     }).then(function (response) {
         return response.json();
     }).then(function (data) {
+
         for (i = 0; i < data.results[0].votes.length; i++) {
+            let box2 = document.createElement("div");
             let container = document.createElement("div");
             let column1 = document.createElement("div");
             let column2 = document.createElement("div");
             let column3 = document.createElement("div");
-            let billDescTitle = document.createElement("h2");
             let billDesc = document.createElement("div");
-            let positionTitle = document.createElement("h2");
             let position = document.createElement("div");
-            let totalVote = document.createElement("h2");
             let totalVoteYes = document.createElement("div");
             let totalVoteNo = document.createElement("div");
             let totalVoteNV = document.createElement("div");
-
+            let billDescTitle = document.createElement("h2");
+            let positionTitle = document.createElement("h2");
+            let totalVote = document.createElement("h2");
             
+            box2.className = "board";
             container.className = "columns";
-            column1.className = "column";
-            column2.className = "column";
-            column3.className = "column";
+            column1.classList = "column";
+            column2.classList = "column";
+            column3.classList = "column";
             billDescTitle.className = "billDescTitle";
-            billDesc.className = "billDesc";
             positionTitle.className = "positionTitle"
-            position.className = "position";
             totalVote.className = "totalvote";
+            billDesc.className = "billDesc";
+            position.className = "position";
             totalVoteYes.className = "totalVoteYes";
             totalVoteNo.className =  "totalVoteNo";
             totalVoteNV.className = "totalVoteNV";
             
             billDescTitle.textContent = "Description"
-            billDesc.textContent = data.results[0].votes[i].description;
-
             positionTitle.textContent = "Position";
-            position.textContent = data.results[0].votes[i].position;
-
             totalVote.textContent = "Total Vote Count";
+            billDesc.textContent = data.results[0].votes[i].description;
+            
+            position.textContent = data.results[0].votes[i].position;
+            
             totalVoteYes.textContent = "Yes : " + data.results[0].votes[i].total.yes;
             totalVoteNo.textContent = "No: " + data.results[0].votes[i].total.no;
             totalVoteNV.textContent = "Not Voting: " + data.results[0].votes[i].total.not_voting;
-
-            displayEl.appendChild(container);
-
+            
+            displayEl.appendChild(box2);
+            box2.appendChild(container);
             container.appendChild(column1);
             container.appendChild(column2);
             container.appendChild(column3);
-
             column1.appendChild(billDescTitle);
             column1.appendChild(billDesc);
-
             column2.appendChild(positionTitle);
             column2.appendChild(position);
-
             column3.appendChild(totalVote);
             column3.appendChild(totalVoteYes);
             column3.appendChild(totalVoteNo);
-            column3.appendChild(totalVoteNV);   
+            column3.appendChild(totalVoteNV);
         }
     })
 }
