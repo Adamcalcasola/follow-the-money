@@ -157,7 +157,7 @@ function voteSummary(id) {
 }
 // Displays reps voting record
 function voteRecord(id) {
-    voteRecordEl.innerHTML = "";
+    displayEl.innerHTML = "";
     fetch(ppUrl + id + "/votes.json", {
         method: "GET",
         headers: {
@@ -572,7 +572,7 @@ function candIndustry(id) {
                 industryTitle.textContent = "Industry:";
                 contributionsTitle.textContent = "Total Contributions:";
 
-                delegationEl.appendChild(box);
+                displayEl.appendChild(box);
                 box.appendChild(name);
                 box.appendChild(cycle);
                 box.appendChild(updated);
