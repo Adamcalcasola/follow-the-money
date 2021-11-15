@@ -144,7 +144,7 @@ function voteRecord(id) {
             let totalVote = document.createElement("h2");
             
             box2.className = "board";
-            container.className = "columns";
+            container.className = "columns is-mobile";
             column1.classList = "column";
             column2.classList = "column";
             column3.classList = "column";
@@ -370,7 +370,7 @@ function candSummary(id) {
                 })
 
                 box.className = "board";
-                container.className = "columns";
+                container.className = "columns is-mobile";
                 column1.className = "column";
                 column2.className = "column";
                 cycle.className = "cycle";
@@ -472,7 +472,7 @@ function candContrib(id) {
                 })
 
                 box.className = "board";
-                container.className = "columns";
+                container.className = "columns is-mobile";
                 column1.className = "column";
                 column2.className = "column";
                 cycle.className = "cycle";
@@ -552,7 +552,7 @@ function candIndustry(id) {
                     repBio(id);
                 })
                 box.className = "board";
-                container.className = "columns";
+                container.className = "columns is-mobile";
                 column1.className = "column";
                 column2.className = "column";
                 cycle.className = "cycle";
@@ -631,7 +631,7 @@ function candSector(id) {
                     repBio(id);
                 })
                 box.className = "board";
-                container.className = "columns";
+                container.className = "columns is-mobile";
                 column1.className = "column";
                 column2.className = "column";
                 cycle.className = "cycle";
