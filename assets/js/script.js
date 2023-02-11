@@ -16,64 +16,7 @@ bioBox.classList = "board";
 voteBox.classList = "column is-fluid is-danger board";
 voteBox.setAttribute("id", "vote-box");
 
-// loads previous search from local storage
-function loadSearch() {
-    searches = JSON.parse(localStorage.getItem("searches")) || [];
-    for(i=0;i<searches.length;i++) {
-        let saveOption = document.createElement("Option");
-        saveOption.setAttribute("value", searches[i].id);
-        saveOption.textContent = searches[i].name;
-        searchSave.appendChild(saveOption);
-    }
-}
 
-// saves searched representive and populated select box
-function saveSearch(id) {
-    fetch(ppUrl + id + ".json", {
-        method: "GET",
-        headers: {"X-API-Key": ppApiKey}
-    }).then(function (response) {
-        return response.json();
-    }).then(function (data) {
-
-    let memberId = data.results[0].id;
-    let firstName = data.results[0].first_name;
-    let lastName = data.results[0].last_name;
-    let fullName = firstName + " " + lastName;
-
-    let saveOption = document.createElement("Option");
-    saveOption.setAttribute("value", memberId);
-    saveOption.textContent = fullName;
-    searchSave.appendChild(saveOption);
-
-    searches.push({
-        id: memberId,
-        name: fullName
-    });
- 
-    localStorage.setItem("searches", JSON.stringify(searches));
-    repBio(memberId);
-    })
-}
-
-// function(uncalled) for future feature to search bills by key word
-function searchBills(input) {
-    console.log(input);
-    fetch(ppUrl2 + input, {
-        method: "GET",
-        headers: {
-            "X-API-Key": ppApiKey
-        }
-    }).then(function (response) {
-        return response.json();
-    }).then(function (data) {
-        console.log(data);
-        for (i=0;i<10;i++) {
-            let billId = data.results[0].bills[i].bill_id;
-            console.log(billId);
-        }
-    })
-}
 // Displays reps voting summary and current committee assignments
 function voteSummary(id) {
     fetch(ppUrl + id + ".json", {
